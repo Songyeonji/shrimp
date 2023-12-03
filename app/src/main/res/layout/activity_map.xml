@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".MapActivity">
 
-<!--    지도 레이아웃-->
     <fragment
         android:id="@+id/map_fragment"
         android:layout_width="match_parent"
@@ -16,15 +15,13 @@
         app:layout_constraintTop_toTopOf="parent"/>
 
 
-    <!--    그림자 효과-->
+
     <View
         android:layout_width="match_parent"
         android:layout_height="25dp"
         android:background="@drawable/gradient_shadow"
         app:layout_constraintBottom_toTopOf="@id/main_content"
         android:rotation="180"/>
-
-    <!--    홈화면 레이아웃-->
     <FrameLayout
         android:id="@+id/main_content"
         android:layout_width="match_parent"
@@ -35,7 +32,6 @@
         android:padding="7dp"
         android:background="@color/white">
 
-        <!--    불법주정차, 유/무료 주차장 버튼 레이아웃 -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -77,8 +73,7 @@
                 android:gravity="center"
                 android:backgroundTint="#8ED1E6"
                 android:padding="10dp"
-                android:clickable="true"
-                android:onClick="show_paidParkingZone">
+                android:clickable="true">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -99,8 +94,7 @@
                 android:padding="10dp"
                 android:backgroundTint="#8EC5F6"
                 android:gravity="center"
-                android:clickable="true"
-                android:onClick="show_freeParkingZone">
+                android:clickable="true">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -112,7 +106,6 @@
 
         </LinearLayout>
 
-        <!--    출발지 & 도착지 검색창 레이아웃-->
         <LinearLayout
             android:id="@+id/search_layout"
             android:layout_width="match_parent"

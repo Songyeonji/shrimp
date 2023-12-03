@@ -1,68 +1,30 @@
 package com.example.seuzima;
 
-import com.google.firebase.database.DatabaseReference;
-import org.json.JSONArray;
-import org.json.JSONObject;
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.URL;
-
 public class noParkingZone_API {
+    public static String STRING_NAME = "NAME";
+    public static String STRING_ADDR = "ADDR";
+    public static String STRING_LNG = "LNG";
+    public static String STRING_LAT = "LAT";
 
-    public static void getNoParkingData(DatabaseReference nopz){
-        new Thread(){
-            @Override
-            public void run(){
-                // 쿼리 작성하기
-                String api_key = "5Q44AbprRae2DW%2FDurbwg83MQLdKuV9wx3jkkhdCcZNwYdEyIw43X8kzO2syrpPz%2FQ257YQOjs3RFF4OnA4QVQ%3D%3D";
-                String pageNo = "1";
-                String dataCount = "365";
-                String queryUrl = "https://apis.data.go.kr/6300000/openapi2022/vstpCCTV/getvstpCCTV?serviceKey="+api_key+
-                        "&pageNo="+pageNo+"&numOfRows="+dataCount;
+    String name; // 명칭
+    String addr; // 주소
+    String LON; // 경도
+    String LAT; // 위도
 
-                try {
-                    // 데이터 받아오기
-                    URL url = new URL(queryUrl);
+    public noParkingZone_API(String d_name, String d_addr, String d_lon, String d_lat) {
+        this.name = d_name;
+        this.addr = d_addr;
+        this.LAT = d_lat;
+        this.LON = d_lon;
+    }
 
-                    InputStream is = url.openStream();
-                    InputStreamReader isr = new InputStreamReader(is);
-                    BufferedReader reader = new BufferedReader(isr);
-
-                    StringBuffer buffer = new StringBuffer();
-                    String line = reader.readLine();
-                    while (line != null) {
-                        buffer.append(line + "\n");
-                        line = reader.readLine();
-                    }
-
-                    // 데이터 파싱하기
-                    String jsonString = buffer.toString();
-                    JSONObject jsonObject = new JSONObject(jsonString);
-                    JSONObject response = jsonObject.getJSONObject("response");
-                    JSONObject body = response.getJSONObject("body");
-                    JSONArray items = body.getJSONArray("items");
-
-                    noParkingZone noPZ;
-                    String name;
-                    String addr;
-                    double lat;
-                    double lon;
-
-                    for (int i=0; i<365;i++){
-                        JSONObject data = items.getJSONObject(i);
-                        name = data.getString("manageNo");
-                        addr = data.getString("lnmAdres");
-                        lat = Double.valueOf(data.getString("crdntX"));
-                        lon = Double.valueOf(data.getString("crdntY"));
-                        noPZ = new noParkingZone(name, addr, lat, lon);
-                        nopz.push().setValue(noPZ);
-                    }
-
-                } catch (Exception e){
-                    e.printStackTrace();
-                }
-            }
-        }.start();
+    @Override
+    public String toString() {
+        return "noParkingZone_ApiData{" +
+                "name='" + name + '\'' +
+                ", addr='" + addr + '\'' +
+                "lat='" + LAT + '\'' +
+                ", lon='" + LON + '\'' +
+                '}';
     }
 }

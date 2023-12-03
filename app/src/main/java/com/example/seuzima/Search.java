@@ -24,20 +24,13 @@ import java.io.InputStream;
 
 public class Search extends AppCompatActivity {
     private searched_sub l_sub;
-
-    // 사용자가 위치 정보를 검색하고 '엔터'를 치면 보여지는 정보 페이지
     public static LinearLayout loc_inform_view;
 
-    // 사용자가 위치 정보를 검색하기 전('엔터'를 치기 전) 보여지는 최근 검색어 페이지
     public static LinearLayout recent_view;
 
-    // 정보 페이지에 출력되는 위치 정보의 위경도를 저장하는 변수들
     public Double longi;
     public Double lati;
-
     public static Context context;
-
-    // 검색하는 editText
     public static EditText search_bar;
 
 
@@ -121,8 +114,6 @@ public class Search extends AppCompatActivity {
     }
 
 
-    // 이건 이전에 만들었던 코드 그대로 갖고온 것.. 일단 혹시 몰라서 안지우고 놔둔 것이고,
-    // 그대로 사용할 것 같지는 않지만 혹시 모르니 참고만 해주세요.
     public void read_json(String text) {
         //json 자료 가져오기
         String json = "";
@@ -163,7 +154,6 @@ public class Search extends AppCompatActivity {
 
     }
 
-    // 사용자가 검색창에서 '엔터'를 눌렀을 때 실행되는 함수
     private void searched(String name, String address, Double lat, Double lon){
 
 
@@ -213,7 +203,6 @@ public class Search extends AppCompatActivity {
 
     }
 
-    // '<' 버튼 클릭하면 실행되는 함수. 이전 '홈'화면으로 되돌아가는 코드
     public void before(View view) {
         Intent intent_before = new Intent(Search.this, MapActivity.class);
         startActivity(intent_before);
