@@ -1,92 +1,262 @@
 package com.example.seuzima;
 
-import com.google.firebase.database.DatabaseReference;
+import android.os.AsyncTask;
+import android.util.Log;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserFactory;
+
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 
-public class ParkingZone_API  {
-    public static void getParkingData(DatabaseReference freepz, DatabaseReference paidpz){
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
+public class ParkingZone_API extends AsyncTask<Void, Void, String> {
+
+    public static String name; // 명칭
+    public static String addr; // 명칭
+    public static Double lon; // 경도
+    public static Double lat; // 위도
+    public static int totalQty; // 주차 총면적수
+
+
+    //유료 주차장 변수들
+    public static String[] paid_name = new String[719]; // 명칭
+    public static String[] paid_addr= new String[719]; // 주소
+    public static Double[] paid_lon= new Double[719]; // 경도
+    public static Double[] paid_lat= new Double[719]; // 위도
+    public static int[] paid_totalQty = new int[719]; // 주차 총면적수
+    public static int[] paid_baseTime= new int[719]; // 주차 기본시간
+    public static int[] paid_baseRate = new int[719]; // 주차 기본요금
+    public static int[] paid_addTime= new int[719]; // 추가 단위시간
+    public static int[] paid_addRate = new int[719]; // 추가 단위요금
+    public static String[] paid_weekdayOpenTime= new String[719]; // 평일 운영 시작 시간
+    public static String[] paid_weekdayCloseTime= new String[719]; // 평일 운영 종료 시간
+    public static String[] paid_satOpenTime= new String[719]; // 토요일 운영 시작 시간
+    public static String[] paid_satCloseTime= new String[719]; // 토요일 운영 종료 시간
+    public static String[] paid_holidayOpenTime= new String[719]; // 공휴일 운영 시작 시간
+    public static String[] paid_holidayCloseTime= new String[719]; // 공휴일 운영 종료 시간
+
+    //무료 주차장
+    public static String[] free_name = new String[719]; // 명칭
+    public static String[] free_addr= new String[719]; // 주소
+    public static Double[] free_lon= new Double[719]; // 경도
+    public static Double[] free_lat= new Double[719]; // 위도
+    public static int[] free_totalQty = new int[719]; // 주차 총면적수
+    public static int[] free_baseTime= new int[719]; // 주차 기본시간
+    public static int[] free_baseRate = new int[719]; // 주차 기본요금
+    public static int[] free_addTime= new int[719]; // 추가 단위시간
+    public static int[] free_addRate = new int[719]; // 추가 단위요금
+    public static String[] free_weekdayOpenTime= new String[719]; // 평일 운영 시작 시간
+    public static String[] free_weekdayCloseTime= new String[719]; // 평일 운영 종료 시간
+    public static String[] free_satOpenTime= new String[719]; // 토요일 운영 시작 시간
+    public static String[] free_satCloseTime= new String[719]; // 토요일 운영 종료 시간
+    public static String[] free_holidayOpenTime= new String[719]; // 공휴일 운영 시작 시간
+    public static String[] free_holidayCloseTime= new String[719]; // 공휴일 운영 종료 시간
+    static int free = 0;
+    static int paid = 0;
+
+
+    public static void getParkingData(){
+
         new Thread(){
             @Override
             public void run(){
-                for(int pn = 1; pn <= 15; pn++) {
-                    // 쿼리 작성하기
-                    String api_key = "5Q44AbprRae2DW%2FDurbwg83MQLdKuV9wx3jkkhdCcZNwYdEyIw43X8kzO2syrpPz%2FQ257YQOjs3RFF4OnA4QVQ%3D%3D";
-                    String pageNo = Integer.toString(pn);
-                    String dataCount;
-                    if (pn < 15){
-                        dataCount = "50";
-                    }else{
-                        dataCount = "19";
-                    }
-                    String queryUrl = "https://apis.data.go.kr/6300000/pis/parkinglotIF?serviceKey="+api_key+
-                            "&numOfRows="+dataCount+"&pageNo="+pageNo;
+                // 쿼리 작성하기
+                String api_key = "5Q44AbprRae2DW%2FDurbwg83MQLdKuV9wx3jkkhdCcZNwYdEyIw43X8kzO2syrpPz%2FQ257YQOjs3RFF4OnA4QVQ%3D%3D";
 
-                    try {
-                        // 데이터 받아오기
-                        URL url = new URL(queryUrl);
-                        InputStream is = url.openStream();
+                String pageNo = "1";
+                String dataCount = "50";
+                String queryUrl = "https://apis.data.go.kr/6300000/pis/parkinglotIF?serviceKey="+api_key+
+                        "&numOfRows="+dataCount+"&pageNo="+pageNo;
 
-                        XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
-                        XmlPullParser xpp = factory.newPullParser();
-                        xpp.setInput(new InputStreamReader(is, "UTF-8"));
+                try {
+                    // 데이터 받아오기
+                    URL url = new URL(queryUrl);
+                    InputStream is = url.openStream();
+                    StringBuffer buffer = new StringBuffer();
 
-                        String tag;
-                        int eventType = xpp.getEventType();
-                        xpp.next();
+                    XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
+                    XmlPullParser xpp = factory.newPullParser();
+                    xpp.setInput(new InputStreamReader(is, "UTF-8"));
 
-                        freeParkingZone freePZ;
-                        paidParkingZone paidPZ;
-                        String name = null;
-                        Double lat = null;
-                        Double lon = null;
-                        String addr = null;
-                        String type = null;
+                    String tag;
+                    xpp.next();
+                    int eventType = xpp.getEventType();
 
-                        while (eventType != XmlPullParser.END_DOCUMENT) {
-                            tag = xpp.getName();
-                            switch (eventType) {
-                                case XmlPullParser.START_TAG:
-                                    if (tag.equals("name")) {
-                                        xpp.next();
-                                        name = xpp.getText();
-                                    } else if (tag.equals("lat")) {
-                                        xpp.next();
-                                        lat = Double.parseDouble(xpp.getText());
-                                    } else if (tag.equals("lon")) {
-                                        xpp.next();
-                                        lon = Double.parseDouble(xpp.getText());
-                                    } else if (tag.equals("address")) {
-                                        xpp.next();
-                                        addr = xpp.getText();
-                                    } else if (tag.equals("type")) {
-                                        xpp.next();
-                                        type = xpp.getText();
+                    while (eventType != XmlPullParser.END_DOCUMENT) {
+                        switch (eventType) {
+                            case XmlPullParser.START_DOCUMENT:
+                                buffer.append("파싱 시작..\n\n");
+                                break;
+
+                            case XmlPullParser.START_TAG:
+                                tag = xpp.getName();
+
+                                if (tag.equals("item")) {
+                                    // <item> 태그의 내용을 파싱해야 합니다.
+                                    String name = null;
+                                    Double lat = null;
+                                    Double lon = null;
+                                    String addr = null;
+                                    int totalQty = 0;
+
+                                    while (!(eventType == XmlPullParser.END_TAG && tag.equals("item"))) {
+                                        if (eventType == XmlPullParser.START_TAG) {
+                                            tag = xpp.getName();
+
+                                            if (tag.equals("name")) {
+                                                name = xpp.nextText();
+                                            } else if (tag.equals("lat")) {
+                                                lat = Double.valueOf(xpp.nextText());
+                                            } else if (tag.equals("lon")) {
+                                                lon = Double.valueOf(xpp.nextText());
+                                            } else if (tag.equals("address")) {
+                                                addr = xpp.nextText();
+                                            } else if (tag.equals("totalQty")) {
+                                                totalQty = Integer.parseInt(xpp.nextText());
+                                            }
+                                        }
+                                        eventType = xpp.next();
                                     }
-                                    break;
-                                case XmlPullParser.END_TAG:
-                                    if (tag.equals("item")){
-                                        if (type.equals("무료")) {
-                                            freePZ = new freeParkingZone(name, addr, lat, lon);
-                                            freepz.push().setValue(freePZ);
-                                        } else if (type.equals("유료")) {
-                                            paidPZ = new paidParkingZone(name, addr, lat, lon);
-                                            paidpz.push().setValue(paidPZ);
+
+                                    // <type>에 따라 데이터를 저장
+                                    if (xpp.next() == XmlPullParser.START_TAG) {
+                                        tag = xpp.getName();
+                                        if (tag.equals("type")) {
+                                            if (xpp.nextText().equals("무료")) {
+                                                free_name[free] = name;
+                                                free_lat[free] = lat;
+                                                free_lon[free] = lon;
+                                                free_addr[free] = addr;
+                                                free_totalQty[free] = totalQty;
+
+                                                free++;
+                                            } else {
+                                                paid_name[paid] = name;
+                                                paid_lat[paid] = lat;
+                                                paid_lon[paid] = lon;
+                                                paid_addr[paid] = addr;
+                                                paid_totalQty[paid] = totalQty;
+
+                                                paid++;
+                                            }
                                         }
                                     }
-                                    break;
-                            }
-                            eventType = xpp.next();
+                                }
+                                break;
                         }
-                    } catch (Exception e) {
-                        e.printStackTrace();
+
+                        eventType = xpp.next();
                     }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
+
             }
         }.start();
 
+//        if (name==null) {
+//            for (int i = 1; i<=15; i++) {
+//                int finalI = i;
+//
+//            }
+//
+//        }
+
+    }
+
+    private String url;
+    private int n;
+
+    public ParkingZone_API(String url, int n) {
+
+        this.n = n;
+        this.url = url;
+//        free = free+50*(n-1);
+//        paid = paid+50*(n-1);
+    }
+
+    @Override
+    protected String doInBackground(Void... params) {
+
+        Log.d("start:","start");
+
+        DocumentBuilderFactory dbFactoty = DocumentBuilderFactory.newInstance();
+        DocumentBuilder dBuilder = null;
+        try {
+            dBuilder = dbFactoty.newDocumentBuilder();
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();
+        }
+        Document doc = null;
+        try {
+            doc = dBuilder.parse(url);
+        } catch (IOException | SAXException e) {
+            e.printStackTrace();
+        }
+
+        // root tag
+        doc.getDocumentElement().normalize();
+        System.out.println("Root element: " + doc.getDocumentElement().getNodeName()); // Root element: result
+
+        // 파싱할 tag
+        NodeList nList = doc.getElementsByTagName("item");
+
+        for(int temp = 0; temp < nList.getLength(); temp++){
+            Node nNode = nList.item(temp);
+            if(nNode.getNodeType() == Node.ELEMENT_NODE){
+
+                Element eElement = (Element) nNode;
+                String type = getTagValue("type", eElement);
+
+                if (type.equals("무료")) {
+                    free_name[free] = getTagValue("name", eElement);
+                    free_lat[free] = Double.valueOf(getTagValue("lat", eElement));
+                    free_lon[free] = Double.valueOf(getTagValue("lon", eElement));
+                    free_addr[free] = getTagValue("address", eElement);
+                    free_totalQty[free] = Integer.parseInt(getTagValue("totalQty", eElement));
+
+                    free++;
+                } else {
+                    paid_name[paid] = getTagValue("name", eElement);
+                    paid_lat[paid] = Double.valueOf(getTagValue("lat", eElement));
+                    paid_lon[paid] = Double.valueOf(getTagValue("lon", eElement));
+                    paid_addr[paid] = getTagValue("address", eElement);
+                    paid_totalQty[paid] = Integer.parseInt(getTagValue("totalQty", eElement));
+
+                    paid++;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    @Override
+    protected void onPostExecute(String str) {
+        super.onPostExecute(str);
+    }
+
+    private String getTagValue(String tag, Element eElement) {
+        NodeList nlList = eElement.getElementsByTagName(tag).item(0).getChildNodes();
+        Node nValue = (Node) nlList.item(0);
+        if(nValue == null)
+            return null;
+        return nValue.getNodeValue();
     }
 }
+
+

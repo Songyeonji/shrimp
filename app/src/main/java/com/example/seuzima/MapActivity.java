@@ -64,8 +64,24 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     // 불법주정차 단속 위치 마커 리스트
     private List<Marker> noParking_markerList = new ArrayList<>();
 
-    // 불법주정차 단속에 대한 마커가 찍혔는지 안찍혔는지 확인하고 구분하기 위한 변수
+    // 유료주차장 위치 api에서 데이터 받아와서 저장하는 변수들
+    private String[] paidParkingZone_name = new String[719];
+    private String[] paidParkingZone_addr = new String[719];
+    private Double[] paidParkingZone_lat = new Double[719];
+    private Double[] paidParkingZone_lon = new Double[719];
+    private List<Marker> paid_markerList = new ArrayList<>();
+
+    // 무료주차장 위치 api에서 데이터 받아와서 저장하는 변수들
+    private String[] freeParkingZone_name = new String[719];
+    private String[] freeParkingZone_addr = new String[719];
+    private Double[] freeParkingZone_lat = new Double[719];
+    private Double[] freeParkingZone_lon = new Double[719];
+    private List<Marker> free_markerList = new ArrayList<>();
+
+    // 불법주정차, 유/무료 주차장에 대한 마커가 찍혔는지 안찍혔는지 확인하고 구분하기 위한 변수들
     private Boolean noParking = Boolean.FALSE;
+    private Boolean paidParking = Boolean.FALSE;
+    private Boolean freeParking = Boolean.FALSE;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +90,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         NaverMapSdk.getInstance(this).setClient(
                 new NaverMapSdk.NaverCloudPlatformClient("83ejnr111i"));
         getNoParkingData();
+        getParkingData();
+
+
 
         if (hasLocationPermissions()) {
             // 권한이 이미 허용된 경우 지도 초기화
@@ -175,13 +194,44 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     }
 
+    // 주차장 api에서 데이터 가져오기 (가져오는데 시간이 많이 소요됨..ㅠㅠ)
+    private void getParkingData() {
+        // 주차장 api는 한 페이지에 데이터 50개만 출력이 가능하기 때문에
+        // 반복문을 사용해서 한 페이지에 50개씩, 총 15번을 반복해서 데이터를 가져와야함.
+        // 그래서 가져오는데 시간이 많이 걸림..
+        // 총 데이터 = 719개..
+
+        for (int i = 1; i<=15; i++) {
+            String api_key = "5Q44AbprRae2DW%2FDurbwg83MQLdKuV9wx3jkkhdCcZNwYdEyIw43X8kzO2syrpPz%2FQ257YQOjs3RFF4OnA4QVQ%3D%3D";
+
+            String pageNo = Integer.toString(i);
+            String dataCount = "50";
+            String queryUrl = "https://apis.data.go.kr/6300000/pis/parkinglotIF?serviceKey="+api_key+
+                    "&numOfRows="+dataCount+"&pageNo="+pageNo;
+
+            ParkingZone_API dust = new ParkingZone_API(queryUrl, i);
+            dust.execute();
+        }
+
+        freeParkingZone_name = ParkingZone_API.free_name;
+        freeParkingZone_addr = ParkingZone_API.free_addr;
+        freeParkingZone_lat = ParkingZone_API.free_lat;
+        freeParkingZone_lon = ParkingZone_API.free_lon;
+
+        paidParkingZone_name = ParkingZone_API.paid_name;
+        paidParkingZone_addr = ParkingZone_API.paid_addr;
+        paidParkingZone_lat = ParkingZone_API.paid_lat;
+        paidParkingZone_lon = ParkingZone_API.paid_lon;
+
+    }
+
 
     // 주차 금지 구역 마커 찍는 구간
     public void show_noParkingZone(View view) {
         Log.d("lat: ", noParkingZone_lat[364].toString());
         if (noParking.equals(Boolean.FALSE)) {
             for (int i = 0; i<365; i++) {
-                noParking_markerList.add(createMarker(naverMap, noParkingZone_lat[i], noParkingZone_lon[i]));
+                noParking_markerList.add(createMarker(naverMap, noParkingZone_lat[i], noParkingZone_lon[i], "no"));
                 noParking = Boolean.TRUE;
             }
         } else {
@@ -192,12 +242,57 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         }
     }
 
+    // 무료 주차장 마커 표시 함수
+    public void show_freeParkingZone(View view) {
+        if (freeParking.equals(Boolean.FALSE)) {
+            int i = 0;
+            while (freeParkingZone_lat[i]!=null) {
+                free_markerList.add(createMarker(naverMap, freeParkingZone_lat[i], freeParkingZone_lon[i], "free"));
+                freeParking = Boolean.TRUE;
+                i++;
+            }
+        } else {
+            int i = 0;
+            while (freeParkingZone_lat[i]!=null) {
+                hideMarkers(free_markerList);
+                freeParking = Boolean.FALSE;
+                i++;
+            }
+        }
+    }
+
+    // 유료 주차장 마커 표시 함수
+    public void show_paidParkingZone(View view) {
+        if (paidParking.equals(Boolean.FALSE)) {
+            int i = 0;
+            while (paidParkingZone_lat[i]!=null) {
+                paid_markerList.add(createMarker(naverMap, paidParkingZone_lat[i], paidParkingZone_lon[i], "paid"));
+                paidParking = Boolean.TRUE;
+                i++;
+            }
+        } else {
+            int i = 0;
+            while (paidParkingZone_lat[i]!=null) {
+                hideMarkers(paid_markerList);
+                paidParking = Boolean.FALSE;
+                i++;
+            }
+        }
+    }
+
     // 지도에 다중 marker 생성해서 출력하는 함수
-    private Marker createMarker(NaverMap naverMap, double latitude, double longitude) {
+    private Marker createMarker(NaverMap naverMap, double latitude, double longitude, String name) {
         // 마커를 생성하고 위치를 설정하여 지도에 추가합니다.
         Marker marker = new Marker();
         marker.setPosition(new LatLng(latitude, longitude));
-        marker.setIconTintColor(Color.BLUE);
+        if (name.equals("no")) {
+            marker.setIconTintColor(Color.RED);
+        } else if (name.equals("free")) {
+            marker.setIconTintColor(Color.BLUE);
+        } else {
+            marker.setIconTintColor(Color.YELLOW);
+        }
+
         marker.setMap(naverMap);
 
         return marker;
