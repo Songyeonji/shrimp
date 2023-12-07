@@ -1,7 +1,5 @@
 package com.example.seuzima;
 
-import static android.provider.Settings.System.getString;
-
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -12,13 +10,14 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 
-public class noParkingZone_API {
+public class freeParkingZone_API {
 
 
     public static String[] name = new String[365]; // 명칭
     public static String[] addr= new String[365]; // 주소
     public static Double[] lon= new Double[365]; // 경도
     public static Double[] lat= new Double[365]; // 위도
+    int n = 0;
 
 
     public static void getNoParkingData(){
@@ -74,4 +73,5 @@ public class noParkingZone_API {
         }
 
     }
+
 }
