@@ -68,116 +68,6 @@ public class ParkingZone_API extends AsyncTask<Void, Void, String> {
     static int free = 0;
     static int paid = 0;
 
-
-    public static void getParkingData(){
-
-        new Thread(){
-            @Override
-            public void run(){
-                // 쿼리 작성하기
-                String api_key = "5Q44AbprRae2DW%2FDurbwg83MQLdKuV9wx3jkkhdCcZNwYdEyIw43X8kzO2syrpPz%2FQ257YQOjs3RFF4OnA4QVQ%3D%3D";
-
-                String pageNo = "1";
-                String dataCount = "50";
-                String queryUrl = "https://apis.data.go.kr/6300000/pis/parkinglotIF?serviceKey="+api_key+
-                        "&numOfRows="+dataCount+"&pageNo="+pageNo;
-
-                try {
-                    // 데이터 받아오기
-                    URL url = new URL(queryUrl);
-                    InputStream is = url.openStream();
-                    StringBuffer buffer = new StringBuffer();
-
-                    XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
-                    XmlPullParser xpp = factory.newPullParser();
-                    xpp.setInput(new InputStreamReader(is, "UTF-8"));
-
-                    String tag;
-                    xpp.next();
-                    int eventType = xpp.getEventType();
-
-                    while (eventType != XmlPullParser.END_DOCUMENT) {
-                        switch (eventType) {
-                            case XmlPullParser.START_DOCUMENT:
-                                buffer.append("파싱 시작..\n\n");
-                                break;
-
-                            case XmlPullParser.START_TAG:
-                                tag = xpp.getName();
-
-                                if (tag.equals("item")) {
-                                    // <item> 태그의 내용을 파싱해야 합니다.
-                                    String name = null;
-                                    Double lat = null;
-                                    Double lon = null;
-                                    String addr = null;
-                                    int totalQty = 0;
-
-                                    while (!(eventType == XmlPullParser.END_TAG && tag.equals("item"))) {
-                                        if (eventType == XmlPullParser.START_TAG) {
-                                            tag = xpp.getName();
-
-                                            if (tag.equals("name")) {
-                                                name = xpp.nextText();
-                                            } else if (tag.equals("lat")) {
-                                                lat = Double.valueOf(xpp.nextText());
-                                            } else if (tag.equals("lon")) {
-                                                lon = Double.valueOf(xpp.nextText());
-                                            } else if (tag.equals("address")) {
-                                                addr = xpp.nextText();
-                                            } else if (tag.equals("totalQty")) {
-                                                totalQty = Integer.parseInt(xpp.nextText());
-                                            }
-                                        }
-                                        eventType = xpp.next();
-                                    }
-
-                                    // <type>에 따라 데이터를 저장
-                                    if (xpp.next() == XmlPullParser.START_TAG) {
-                                        tag = xpp.getName();
-                                        if (tag.equals("type")) {
-                                            if (xpp.nextText().equals("무료")) {
-                                                free_name[free] = name;
-                                                free_lat[free] = lat;
-                                                free_lon[free] = lon;
-                                                free_addr[free] = addr;
-                                                free_totalQty[free] = totalQty;
-
-                                                free++;
-                                            } else {
-                                                paid_name[paid] = name;
-                                                paid_lat[paid] = lat;
-                                                paid_lon[paid] = lon;
-                                                paid_addr[paid] = addr;
-                                                paid_totalQty[paid] = totalQty;
-
-                                                paid++;
-                                            }
-                                        }
-                                    }
-                                }
-                                break;
-                        }
-
-                        eventType = xpp.next();
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-            }
-        }.start();
-
-//        if (name==null) {
-//            for (int i = 1; i<=15; i++) {
-//                int finalI = i;
-//
-//            }
-//
-//        }
-
-    }
-
     private String url;
     private int n;
 
@@ -191,6 +81,7 @@ public class ParkingZone_API extends AsyncTask<Void, Void, String> {
 
     @Override
     protected String doInBackground(Void... params) {
+
 
         Log.d("start:","start");
 

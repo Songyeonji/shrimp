@@ -5,6 +5,7 @@ import static android.content.ContentValues.TAG;
 import androidx.annotation.ColorRes;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentManager;
@@ -16,7 +17,11 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.naver.maps.geometry.LatLng;
 import com.naver.maps.map.LocationTrackingMode;
 import com.naver.maps.map.MapFragment;
@@ -24,6 +29,7 @@ import com.naver.maps.map.NaverMap;
 import com.naver.maps.map.NaverMapSdk;
 import com.naver.maps.map.OnMapReadyCallback;
 import com.naver.maps.map.overlay.Marker;
+import com.naver.maps.map.overlay.Overlay;
 import com.naver.maps.map.util.FusedLocationSource;
 
 import org.json.JSONArray;
@@ -43,11 +49,11 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     // 사용자 위치정보 저장하는 변수
     private FusedLocationSource locationSource;
-    private NaverMap naverMap;
+    public static NaverMap naverMap;
 
     // 사용자 위치 위경도 저장하는 변수
-    private static Double user_lat;
-    private static Double user_lon;
+    public static Double user_lat;
+    public static Double user_lon;
 
     // Manifest에서 설정된 권한 정보 가져오기
     private static final String[] PERMISSIONS = {
@@ -109,6 +115,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         }
         locationSource =
                 new FusedLocationSource(this, LOCATION_PERMISSION_REQUEST_CODE);
+
+
     }
 
     // 사용자가 이전에 해당 앱에 위치 정보를 이용하는 것에 동의했는지 확인하는 함수
@@ -176,6 +184,25 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     }
 
+    private void show_Bottom_Location(String name, String addr, Double lat, Double lon) {
+        LinearLayout search_layout = findViewById(R.id.search_layout);
+        search_layout.setVisibility(View.GONE);
+        final int[] mainLayoutHeight = {0};
+
+        findViewById(R.id.main_content).setVisibility(View.VISIBLE);
+
+        Bundle bundle = new Bundle();
+        bundle.putString("loc_name", name);
+        bundle.putString("loc_addr", addr);
+        bundle.putDouble("loc_lat", lat);
+        bundle.putDouble("loc_lon", lon);
+
+        Bottom_LocationInform bottom_locationInform = new Bottom_LocationInform();
+        bottom_locationInform.setArguments(bundle);
+        getSupportFragmentManager().beginTransaction().replace(R.id.main_content, bottom_locationInform).commit();
+
+    }
+
     // 검색창 클릭하면 검색페이지로 이동하는 함수
     public void search(View view) {
         Intent intent_searching = new Intent(MapActivity.this, Search.class);
@@ -201,7 +228,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         // 그래서 가져오는데 시간이 많이 걸림..
         // 총 데이터 = 719개..
 
-        for (int i = 1; i<=15; i++) {
+        for (int i = 1; i<=2; i++) {
             String api_key = "5Q44AbprRae2DW%2FDurbwg83MQLdKuV9wx3jkkhdCcZNwYdEyIw43X8kzO2syrpPz%2FQ257YQOjs3RFF4OnA4QVQ%3D%3D";
 
             String pageNo = Integer.toString(i);
@@ -294,6 +321,52 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         }
 
         marker.setMap(naverMap);
+
+        Overlay.OnClickListener listener = overlay -> {
+            Marker markers = (Marker) overlay;
+
+            LatLng latLng = markers.getPosition();
+            Double lat = latLng.latitude;
+            Double lon = latLng.longitude;
+            String names = null;
+            String addr = null;
+            if (marker.getIconTintColor()==Color.RED) {
+                Log.d("clikc ltlng:", lat.toString()+" | "+lon.toString());
+                int n = 0;
+                while (!(noParkingZone_lat[n].equals(lat) && noParkingZone_lon[n].equals(lon))) {
+                    if (noParkingZone_lat[n] == lat && noParkingZone_lon[n] == lon) {
+                        break;
+                    }
+                    n++;
+                }
+                names = noParkingZone_name[n];
+                addr = noParkingZone_addr[n];
+            } else if (marker.getIconTintColor()==Color.YELLOW) {
+                int n = 0;
+                while (!(paidParkingZone_lat[n].equals(lat) && paidParkingZone_lon[n].equals(lon))) {
+                    if (paidParkingZone_lat[n] == lat && paidParkingZone_lon[n] == lon) {
+                        break;
+                    }
+                    n++;
+                }
+                names = paidParkingZone_name[n];
+                addr = paidParkingZone_addr[n];
+            } else {
+                int n = 0;
+                while (!(freeParkingZone_lat[n].equals(lat) && freeParkingZone_lon[n].equals(lon))) {
+                    if (freeParkingZone_lat[n] == lat && freeParkingZone_lon[n] == lon) {
+                        break;
+                    }
+                    n++;
+                }
+                names = freeParkingZone_name[n];
+                addr = freeParkingZone_addr[n];
+            }
+
+            show_Bottom_Location(names, addr, lat, lon);
+            return true;
+        };
+        marker.setOnClickListener(listener);
 
         return marker;
     }

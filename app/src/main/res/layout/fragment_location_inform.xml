@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="24dp"
+    android:orientation="vertical"
+    app:behavior_hideable="false"
+    app:behavior_peekHeight="300dp"
+    app:layout_behavior="@string/bottom_sheet_behavior"
+    tools:context=".Bottom_LocationInform">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <TextView
+        android:id="@+id/loc_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="장소 이름"
+        android:textStyle="bold"
+        android:textSize="24dp"
+        android:textColor="#614822"/>
+
+
+    <TextView
+        android:id="@+id/loc_addr"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="주소"
+        android:textColor="#777777"
+        android:textSize="18dp"
+        android:textStyle="bold"
+        android:layout_marginTop="10dp"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#cccccc"
+        android:layout_marginTop="10dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
+
+
+        <Button
+            android:id="@+id/bttn_dest"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="도착"
+            android:layout_marginLeft="7dp"/>
+    </LinearLayout>
+
+</LinearLayout>
