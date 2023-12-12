@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "742162351994",
+    "firebase_url": "https://shrimp-seuzima-default-rtdb.firebaseio.com",
+    "project_id": "shrimp-seuzima",
+    "storage_bucket": "shrimp-seuzima.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:742162351994:android:cc1491a85b85e70d56f8c3",
+        "android_client_info": {
+          "package_name": "com.example.seuzima"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCPEdAEWYZOOb5T2MXCFYrYnk68QL_0YyU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -42,11 +42,20 @@ public class noParkingZone_API {
                     JSONObject response = jsonObject.getJSONObject("response");
                     JSONObject body = response.getJSONObject("body");
                     JSONArray items = body.getJSONArray("items");
+
                     noParkingZone noPZ;
+                    String name;
+                    String addr;
+                    double lat;
+                    double lon;
 
                     for (int i=0; i<365;i++){
                         JSONObject data = items.getJSONObject(i);
-                        noPZ = new noParkingZone(data.getString("manageNo"), data.getString("lnmAdres"), Double.valueOf(data.getString("crdntX")), Double.valueOf(data.getString("crdntY")));
+                        name = data.getString("manageNo");
+                        addr = data.getString("lnmAdres");
+                        lat = Double.valueOf(data.getString("crdntX"));
+                        lon = Double.valueOf(data.getString("crdntY"));
+                        noPZ = new noParkingZone(name, addr, lat, lon);
                         nopz.push().setValue(noPZ);
                     }
 
