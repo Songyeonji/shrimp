@@ -188,7 +188,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             noParking = Boolean.TRUE;
         } else {
             hideMarkers(noParking_markerList);
-            //noParking_markerList = new ArrayList<>();
+            noParking_markerList.clear();
             noParking = Boolean.FALSE;
         }
     }
@@ -217,7 +217,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             freeParking = Boolean.TRUE;
         } else {
             hideMarkers(free_markerList);
-            //free_markerList = new ArrayList<>();
+            free_markerList.clear();
             freeParking = Boolean.FALSE;
         }
     }
@@ -246,7 +246,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             paidParking = Boolean.TRUE;
         } else {
             hideMarkers(paid_markerList);
-            //paid_markerList = new ArrayList<>();
+            paid_markerList.clear();
             paidParking = Boolean.FALSE;
         }
     }
