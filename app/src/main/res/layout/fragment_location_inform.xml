@@ -4,23 +4,39 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:padding="24dp"
     android:orientation="vertical"
     app:behavior_hideable="false"
     app:behavior_peekHeight="300dp"
+    android:padding="10dp"
     app:layout_behavior="@string/bottom_sheet_behavior"
     tools:context=".Bottom_LocationInform">
 
     <!-- TODO: Update blank fragment layout -->
 
-    <TextView
-        android:id="@+id/loc_title"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="장소 이름"
-        android:textStyle="bold"
-        android:textSize="24dp"
-        android:textColor="#614822"/>
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/loc_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="장소 이름"
+            android:textStyle="bold"
+            android:textSize="24dp"
+            android:layout_weight="1"
+            android:textColor="#614822"/>
+
+        <ImageView
+            android:id="@+id/delete_bttn"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/x_icon"
+            android:clickable="true"/>
+    </LinearLayout>
+
 
 
     <TextView
@@ -46,13 +62,44 @@
         android:layout_marginTop="10dp"
         android:orientation="horizontal">
 
+        <FrameLayout
+            android:id="@+id/bttn_start"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingVertical="10dp"
+            android:paddingHorizontal="30dp"
+            android:background="@drawable/round_button"
+            android:clickable="true"
+            android:layout_marginLeft="7dp">
 
-        <Button
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="출발"
+                android:textSize="20dp"
+                android:textStyle="bold"/>
+        </FrameLayout>
+
+        <FrameLayout
             android:id="@+id/bttn_dest"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="도착"
-            android:layout_marginLeft="7dp"/>
+            android:paddingVertical="10dp"
+            android:paddingHorizontal="30dp"
+            android:background="@drawable/round_button"
+            android:backgroundTint="@color/main_blue"
+            android:clickable="true"
+            android:layout_marginLeft="7dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="도착"
+                android:textColor="@color/white"
+                android:textSize="20dp"
+                android:textStyle="bold"/>
+        </FrameLayout>
+
     </LinearLayout>
 
 </LinearLayout>

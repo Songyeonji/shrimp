@@ -12,6 +12,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -62,8 +64,35 @@ public class Bottom_LocationInform extends Fragment {
         // Inflate the layout for this fragment
         View rootview = inflater.inflate(R.layout.fragment_location_inform, container, false);
 
+        FrameLayout bttnDest = rootview.findViewById(R.id.bttn_dest);
+        bttnDest.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                set_destPoint();
+            }
+        });
+
+        FrameLayout bttnStart = rootview.findViewById(R.id.bttn_start);
+        bttnStart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                set_startPoint();
+            }
+        });
+
+        ImageView bttnDelete = rootview.findViewById(R.id.delete_bttn);
+        bttnDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MapActivity mapActivity = (MapActivity) getActivity();
+                mapActivity.show_searchingLayout();
+            }
+        });
+
         return rootview;
     }
+
+
 
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -82,17 +111,15 @@ public class Bottom_LocationInform extends Fragment {
         // 장소 이름, 주소는 각각 textview에 저장
         loc_title.setText(title);
         loc_addr.setText(addr);
+    }
 
+    // '도착' 버튼 클릭 시 MainActivity로 이동 + 장소 이름, 주소, 위경도 정보 같이 intent
+    public void set_destPoint() {
+        NAVI_API dust = new NAVI_API(user_lat, user_lon, latitude, longitude);
+        dust.execute();
+    }
 
-        Button bttn_dest = view.findViewById(R.id.bttn_dest);
+    public void set_startPoint() {
 
-        // '도착' 버튼 클릭 시 MainActivity로 이동 + 장소 이름, 주소, 위경도 정보 같이 intent
-        bttn_dest.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                NAVI_API dust = new NAVI_API(user_lat, user_lon, latitude, longitude);
-                dust.execute();
-            }
-        });
     }
 }

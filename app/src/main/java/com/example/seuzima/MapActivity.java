@@ -2,26 +2,21 @@ package com.example.seuzima;
 
 import static android.content.ContentValues.TAG;
 
-import androidx.annotation.ColorRes;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
-import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.naver.maps.geometry.LatLng;
 import com.naver.maps.map.LocationTrackingMode;
 import com.naver.maps.map.MapFragment;
@@ -30,15 +25,9 @@ import com.naver.maps.map.NaverMapSdk;
 import com.naver.maps.map.OnMapReadyCallback;
 import com.naver.maps.map.overlay.Marker;
 import com.naver.maps.map.overlay.Overlay;
+import com.naver.maps.map.overlay.OverlayImage;
 import com.naver.maps.map.util.FusedLocationSource;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,6 +43,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     // 사용자 위치 위경도 저장하는 변수
     public static Double user_lat;
     public static Double user_lon;
+    private Bottom_LocationInform bottom_locationInform;
 
     // Manifest에서 설정된 권한 정보 가져오기
     private static final String[] PERMISSIONS = {
@@ -88,6 +78,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private Boolean noParking = Boolean.FALSE;
     private Boolean paidParking = Boolean.FALSE;
     private Boolean freeParking = Boolean.FALSE;
+    private int num=-1;
+    private String tag;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,7 +107,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         }
         locationSource =
                 new FusedLocationSource(this, LOCATION_PERMISSION_REQUEST_CODE);
-
 
     }
 
@@ -197,7 +188,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         bundle.putDouble("loc_lat", lat);
         bundle.putDouble("loc_lon", lon);
 
-        Bottom_LocationInform bottom_locationInform = new Bottom_LocationInform();
+        bottom_locationInform = new Bottom_LocationInform();
         bottom_locationInform.setArguments(bundle);
         getSupportFragmentManager().beginTransaction().replace(R.id.main_content, bottom_locationInform).commit();
 
@@ -268,6 +259,17 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             }
         }
     }
+    public void show_searchingLayout() {
+        findViewById(R.id.search_layout).setVisibility(View.VISIBLE);
+        // FragmentTransaction 시작
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+
+// bottom_locationInform Fragment를 제거
+        transaction.remove(bottom_locationInform);
+
+// 변경된 FragmentTransaction을 반영
+        transaction.commit();
+    }
 
     // 무료 주차장 마커 표시 함수
     public void show_freeParkingZone(View view) {
@@ -313,38 +315,81 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         Marker marker = new Marker();
         marker.setPosition(new LatLng(latitude, longitude));
         if (name.equals("no")) {
-            marker.setIconTintColor(Color.RED);
+            marker.setTag("noParking");
+            marker.setIcon(OverlayImage.fromResource(R.drawable.nopark_icon));
+//            marker.setIconTintColor(Color.RED);
         } else if (name.equals("free")) {
-            marker.setIconTintColor(Color.BLUE);
+            marker.setTag("free");
+            marker.setIcon(OverlayImage.fromResource(R.drawable.free_icon));
         } else {
-            marker.setIconTintColor(Color.YELLOW);
+            marker.setTag("paid");
+            marker.setIcon(OverlayImage.fromResource(R.drawable.dallar_icon));
         }
+
+        marker.setWidth(80);
+        marker.setHeight(80);
 
         marker.setMap(naverMap);
 
         Overlay.OnClickListener listener = overlay -> {
+            Log.d("num:", String.valueOf(num));
+            if (num != -1) {
+                String before_tag = tag;
+                Log.d("tag:", tag);
+                Marker before_marker = new Marker();
+                if (before_tag.equals("noParking")) {
+                    Log.d("tag11:", tag);
+                    /*before_marker = noParking_markerList.get(num);
+                    before_marker.setPosition(new LatLng(noParkingZone_lat[num], noParkingZone_lon[num]));
+                    before_marker.setIcon(OverlayImage.fromResource(R.drawable.dallar_icon));*/
+                } else if (before_tag.equals("paid")) {
+                    paid_markerList.get(num).setIcon(OverlayImage.fromResource(R.drawable.dallar_icon));
+                    paid_markerList.get(num).setMap(naverMap);
+                } else {
+                    free_markerList.get(num).setIcon(OverlayImage.fromResource(R.drawable.free_icon));
+                    free_markerList.get(num).setMap(naverMap);
+                }
+
+                before_marker.setWidth(80);
+                before_marker.setHeight(80);
+                before_marker.setMap(naverMap);
+
+            }
             Marker markers = (Marker) overlay;
 
             LatLng latLng = markers.getPosition();
             Double lat = latLng.latitude;
             Double lon = latLng.longitude;
+            marker.setPosition(new LatLng(lat, lon));
             String names = null;
             String addr = null;
-            if (marker.getIconTintColor()==Color.RED) {
+            tag = (String) marker.getTag();
+            if (marker.getTag().equals("noParking")) {
                 Log.d("clikc ltlng:", lat.toString()+" | "+lon.toString());
+                marker.setIcon(OverlayImage.fromResource(R.drawable.selected_nopark_icon));
+                marker.setWidth(100);
+                marker.setHeight(130);
                 int n = 0;
+
                 while (!(noParkingZone_lat[n].equals(lat) && noParkingZone_lon[n].equals(lon))) {
-                    if (noParkingZone_lat[n] == lat && noParkingZone_lon[n] == lon) {
+                    num = n;
+                    if (noParkingZone_lat[n].equals(lat) && noParkingZone_lon[n].equals(lon)) {
+
                         break;
                     }
                     n++;
                 }
                 names = noParkingZone_name[n];
                 addr = noParkingZone_addr[n];
-            } else if (marker.getIconTintColor()==Color.YELLOW) {
+            } else if (marker.getTag().equals("paid")) {
                 int n = 0;
+                marker.setIcon(OverlayImage.fromResource(R.drawable.selected_dallar_icon));
+                marker.setWidth(100);
+                marker.setHeight(130);
                 while (!(paidParkingZone_lat[n].equals(lat) && paidParkingZone_lon[n].equals(lon))) {
-                    if (paidParkingZone_lat[n] == lat && paidParkingZone_lon[n] == lon) {
+                    num = n;
+                    if (paidParkingZone_lat[n].equals(lat) && paidParkingZone_lon[n].equals(lon)) {
+
                         break;
                     }
                     n++;
@@ -353,16 +398,23 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 addr = paidParkingZone_addr[n];
             } else {
                 int n = 0;
+                marker.setIcon(OverlayImage.fromResource(R.drawable.selected_free_icon));
+                marker.setWidth(100);
+                marker.setHeight(130);
                 while (!(freeParkingZone_lat[n].equals(lat) && freeParkingZone_lon[n].equals(lon))) {
-                    if (freeParkingZone_lat[n] == lat && freeParkingZone_lon[n] == lon) {
+                    num = n;
+                    if (freeParkingZone_lat[n].equals(lat) && freeParkingZone_lon[n].equals(lon)) {
+
                         break;
                     }
                     n++;
                 }
+
                 names = freeParkingZone_name[n];
                 addr = freeParkingZone_addr[n];
-            }
 
+            }
+            marker.setMap(naverMap);
             show_Bottom_Location(names, addr, lat, lon);
             return true;
         };
