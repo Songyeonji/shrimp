@@ -22,7 +22,7 @@ public class SEARCH_API {
 
         String text = null;
         try {
-            text = URLEncoder.encode("한남대학교", "UTF-8");
+            text = URLEncoder.encode("청년다방", "UTF-8");
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException("검색어 인코딩 실패",e);
         }

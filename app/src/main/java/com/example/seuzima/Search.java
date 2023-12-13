@@ -2,9 +2,11 @@ package com.example.seuzima;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
@@ -127,6 +129,8 @@ public class Search extends AppCompatActivity {
         //json 자료 가져오기
         String json = "";
         try {
+            new NaverApiTask().execute();
+
             InputStream is = getAssets().open("json/대전광역시 위치정보_수정.json"); // json파일 이름
             int fileSize = is.available();
 
@@ -211,6 +215,24 @@ public class Search extends AppCompatActivity {
             loc_inform_view.addView(l_sub);
         });
 
+    }
+
+    private class NaverApiTask extends AsyncTask<Void, Void, String> {
+
+        @Override
+        protected String doInBackground(Void... voids) {
+            // ApiExamSearchBlog 클래스의 main 메서드 호출
+            SEARCH_API.main(new String[]{});
+
+            // 여기에서는 비동기적으로 호출되기 때문에 결과가 없거나 기다리지 않는 것이 좋습니다.
+            return "ApiExamSearchBlog.main 호출 완료";
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            // 결과로 UI 업데이트
+            Log.d("result:", result);
+        }
     }
 
     // '<' 버튼 클릭하면 실행되는 함수. 이전 '홈'화면으로 되돌아가는 코드

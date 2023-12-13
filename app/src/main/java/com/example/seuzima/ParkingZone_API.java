@@ -23,7 +23,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-public class ParkingZone_API extends AsyncTask<Void, Void, String> {
+public class ParkingZone_API {
 
     public static String name; // 명칭
     public static String addr; // 명칭
@@ -32,121 +32,108 @@ public class ParkingZone_API extends AsyncTask<Void, Void, String> {
     public static int totalQty; // 주차 총면적수
 
 
+    private static int num = 1044;
     //유료 주차장 변수들
-    public static String[] paid_name = new String[719]; // 명칭
-    public static String[] paid_addr= new String[719]; // 주소
-    public static Double[] paid_lon= new Double[719]; // 경도
-    public static Double[] paid_lat= new Double[719]; // 위도
-    public static int[] paid_totalQty = new int[719]; // 주차 총면적수
-    public static int[] paid_baseTime= new int[719]; // 주차 기본시간
-    public static int[] paid_baseRate = new int[719]; // 주차 기본요금
-    public static int[] paid_addTime= new int[719]; // 추가 단위시간
-    public static int[] paid_addRate = new int[719]; // 추가 단위요금
-    public static String[] paid_weekdayOpenTime= new String[719]; // 평일 운영 시작 시간
-    public static String[] paid_weekdayCloseTime= new String[719]; // 평일 운영 종료 시간
-    public static String[] paid_satOpenTime= new String[719]; // 토요일 운영 시작 시간
-    public static String[] paid_satCloseTime= new String[719]; // 토요일 운영 종료 시간
-    public static String[] paid_holidayOpenTime= new String[719]; // 공휴일 운영 시작 시간
-    public static String[] paid_holidayCloseTime= new String[719]; // 공휴일 운영 종료 시간
+    public static String[] paid_name = new String[num]; // 명칭
+    public static String[] paid_addr= new String[num]; // 주소
+    public static Double[] paid_lon= new Double[num]; // 경도
+    public static Double[] paid_lat= new Double[num]; // 위도
+    public static int[] paid_totalQty = new int[num]; // 주차 총면적수
+    public static int[] paid_baseTime= new int[num]; // 주차 기본시간
+    public static int[] paid_baseRate = new int[num]; // 주차 기본요금
+    public static int[] paid_addTime= new int[num]; // 추가 단위시간
+    public static int[] paid_addRate = new int[num]; // 추가 단위요금
+    public static String[] paid_weekdayOpenTime= new String[num]; // 평일 운영 시작 시간
+    public static String[] paid_weekdayCloseTime= new String[num]; // 평일 운영 종료 시간
+    public static String[] paid_satOpenTime= new String[num]; // 토요일 운영 시작 시간
+    public static String[] paid_satCloseTime= new String[num]; // 토요일 운영 종료 시간
+    public static String[] paid_holidayOpenTime= new String[num]; // 공휴일 운영 시작 시간
+    public static String[] paid_holidayCloseTime= new String[num]; // 공휴일 운영 종료 시간
 
     //무료 주차장
-    public static String[] free_name = new String[719]; // 명칭
-    public static String[] free_addr= new String[719]; // 주소
-    public static Double[] free_lon= new Double[719]; // 경도
-    public static Double[] free_lat= new Double[719]; // 위도
-    public static int[] free_totalQty = new int[719]; // 주차 총면적수
-    public static int[] free_baseTime= new int[719]; // 주차 기본시간
-    public static int[] free_baseRate = new int[719]; // 주차 기본요금
-    public static int[] free_addTime= new int[719]; // 추가 단위시간
-    public static int[] free_addRate = new int[719]; // 추가 단위요금
-    public static String[] free_weekdayOpenTime= new String[719]; // 평일 운영 시작 시간
-    public static String[] free_weekdayCloseTime= new String[719]; // 평일 운영 종료 시간
-    public static String[] free_satOpenTime= new String[719]; // 토요일 운영 시작 시간
-    public static String[] free_satCloseTime= new String[719]; // 토요일 운영 종료 시간
-    public static String[] free_holidayOpenTime= new String[719]; // 공휴일 운영 시작 시간
-    public static String[] free_holidayCloseTime= new String[719]; // 공휴일 운영 종료 시간
+    public static String[] free_name = new String[num]; // 명칭
+    public static String[] free_addr= new String[num]; // 주소
+    public static Double[] free_lon= new Double[num]; // 경도
+    public static Double[] free_lat= new Double[num]; // 위도
+    public static int[] free_totalQty = new int[num]; // 주차 총면적수
+    public static int[] free_baseTime= new int[num]; // 주차 기본시간
+    public static int[] free_baseRate = new int[num]; // 주차 기본요금
+    public static int[] free_addTime= new int[num]; // 추가 단위시간
+    public static int[] free_addRate = new int[num]; // 추가 단위요금
+    public static String[] free_weekdayOpenTime= new String[num]; // 평일 운영 시작 시간
+    public static String[] free_weekdayCloseTime= new String[num]; // 평일 운영 종료 시간
+    public static String[] free_satOpenTime= new String[num]; // 토요일 운영 시작 시간
+    public static String[] free_satCloseTime= new String[num]; // 토요일 운영 종료 시간
+    public static String[] free_holidayOpenTime= new String[num]; // 공휴일 운영 시작 시간
+    public static String[] free_holidayCloseTime= new String[num]; // 공휴일 운영 종료 시간
     static int free = 0;
     static int paid = 0;
 
-    private String url;
-    private int n;
 
-    public ParkingZone_API(String url, int n) {
+    public static void getParkingData(){
+        if (free_name[0]==null || paid_name[0]==null) {
+            new Thread(){
+                @Override
+                public void run(){
+                    // 쿼리 작성하기
+                    String api_key = "UhsJNt7dpE1r5bSAnj7VjXZDFlcK8rpnEkZ%2BrYRhT0CaBNFs%2BcR9okv6jEEoiCYTSjRLSMZsSpXF%2FhdbVCihsw%3D%3D";
+                    String pageNo = "1";
+                    String dataCount = String.valueOf(num);
+                    String queryUrl = "https://challenge.daejeon.go.kr/restapi/openapi/smart_on/parking/info?serviceKey="+api_key+
+                            "&pageNo="+pageNo+"&numOfRows="+dataCount;
 
-        this.n = n;
-        this.url = url;
-//        free = free+50*(n-1);
-//        paid = paid+50*(n-1);
-    }
+                    try {
+                        // 데이터 받아오기
+                        URL url = new URL(queryUrl);
 
-    @Override
-    protected String doInBackground(Void... params) {
+                        InputStream is = url.openStream();
+                        InputStreamReader isr = new InputStreamReader(is);
+                        BufferedReader reader = new BufferedReader(isr);
+
+                        StringBuffer buffer = new StringBuffer();
+                        String line = reader.readLine();
+                        while (line != null) {
+                            buffer.append(line + "\n");
+                            line = reader.readLine();
+                        }
+
+                        // 데이터 파싱하기
+                        String jsonString = buffer.toString();
+                        JSONObject jsonObject = new JSONObject(jsonString);
+//                        JSONObject response = jsonObject.getJSONObject("response");
+//                        JSONObject body = response.getJSONObject("body");
+                        JSONArray items = jsonObject.getJSONArray("resultList");
+
+                        for (int i=0; i<num;i++){
+                            JSONObject data = items.getJSONObject(i);
+                            if (data.getString("park_interval_free_yn").equals("N")) {
+                                paid_name[paid] = data.getString("park_name");
+                                paid_addr[paid] = data.getString("park_full_address");
+                                paid_lat[paid] = data.getDouble("park_latitude");
+                                paid_lon[paid] = data.getDouble("park_longitude");
+                                paid_baseRate[paid] = data.getInt("park_basic_interval_price");
+                                paid_baseTime[paid] = data.getInt("park_basic_interval_minute");
+                                paid++;
+                            } else if(data.getString("park_interval_free_yn").equals("Y")){
+                                free_name[free] = data.getString("park_name");
+                                free_addr[free] = data.getString("park_full_address");
+                                free_lat[free] = data.getDouble("park_latitude");
+                                free_lon[free] = data.getDouble("park_longitude");
+                                free++;
+                            }
+
+                        }
+                        Log.d("ParkingAPI_DATA: ", paid_name[364]);
+                        Log.d("freeParkingAPI_DATA: ", free_name[3]);
 
 
-        Log.d("start:","start");
-
-        DocumentBuilderFactory dbFactoty = DocumentBuilderFactory.newInstance();
-        DocumentBuilder dBuilder = null;
-        try {
-            dBuilder = dbFactoty.newDocumentBuilder();
-        } catch (ParserConfigurationException e) {
-            e.printStackTrace();
-        }
-        Document doc = null;
-        try {
-            doc = dBuilder.parse(url);
-        } catch (IOException | SAXException e) {
-            e.printStackTrace();
-        }
-
-        // root tag
-        doc.getDocumentElement().normalize();
-        System.out.println("Root element: " + doc.getDocumentElement().getNodeName()); // Root element: result
-
-        // 파싱할 tag
-        NodeList nList = doc.getElementsByTagName("item");
-
-        for(int temp = 0; temp < nList.getLength(); temp++){
-            Node nNode = nList.item(temp);
-            if(nNode.getNodeType() == Node.ELEMENT_NODE){
-
-                Element eElement = (Element) nNode;
-                String type = getTagValue("type", eElement);
-
-                if (type.equals("무료")) {
-                    free_name[free] = getTagValue("name", eElement);
-                    free_lat[free] = Double.valueOf(getTagValue("lat", eElement));
-                    free_lon[free] = Double.valueOf(getTagValue("lon", eElement));
-                    free_addr[free] = getTagValue("address", eElement);
-                    free_totalQty[free] = Integer.parseInt(getTagValue("totalQty", eElement));
-
-                    free++;
-                } else {
-                    paid_name[paid] = getTagValue("name", eElement);
-                    paid_lat[paid] = Double.valueOf(getTagValue("lat", eElement));
-                    paid_lon[paid] = Double.valueOf(getTagValue("lon", eElement));
-                    paid_addr[paid] = getTagValue("address", eElement);
-                    paid_totalQty[paid] = Integer.parseInt(getTagValue("totalQty", eElement));
-
-                    paid++;
+                    } catch (Exception e){
+                        e.printStackTrace();
+                    }
                 }
-            }
+            }.start();
         }
 
-        return null;
-    }
-
-    @Override
-    protected void onPostExecute(String str) {
-        super.onPostExecute(str);
-    }
-
-    private String getTagValue(String tag, Element eElement) {
-        NodeList nlList = eElement.getElementsByTagName(tag).item(0).getChildNodes();
-        Node nValue = (Node) nlList.item(0);
-        if(nValue == null)
-            return null;
-        return nValue.getNodeValue();
     }
 }
 

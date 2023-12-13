@@ -206,7 +206,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     // 배열 변수에 저장하도록 함. api를 처음 실행할 때 한번만 사용해서 데이터를 가져와서 저장하고
     // 이후에는 배열 변수에 저장된 데이터를 사용하는 방식으로 하기 위함.
     private void getNoParkingData() {
-        new NaverApiTask().execute();
+
         noParkingZone_API.getNoParkingData();
         noParkingZone_name = noParkingZone_API.name;
         noParkingZone_addr = noParkingZone_API.addr;
@@ -215,23 +215,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     }
 
-    private class NaverApiTask extends AsyncTask<Void, Void, String> {
 
-        @Override
-        protected String doInBackground(Void... voids) {
-            // ApiExamSearchBlog 클래스의 main 메서드 호출
-            SEARCH_API.main(new String[]{});
-
-            // 여기에서는 비동기적으로 호출되기 때문에 결과가 없거나 기다리지 않는 것이 좋습니다.
-            return "ApiExamSearchBlog.main 호출 완료";
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            // 결과로 UI 업데이트
-            Log.d("result:", result);
-        }
-    }
 
     // 주차장 api에서 데이터 가져오기 (가져오는데 시간이 많이 소요됨..ㅠㅠ)
     private void getParkingData() {
@@ -240,7 +224,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         // 그래서 가져오는데 시간이 많이 걸림..
         // 총 데이터 = 719개..
 
-        for (int i = 1; i<=2; i++) {
+        /*for (int i = 1; i<=2; i++) {
             String api_key = "5Q44AbprRae2DW%2FDurbwg83MQLdKuV9wx3jkkhdCcZNwYdEyIw43X8kzO2syrpPz%2FQ257YQOjs3RFF4OnA4QVQ%3D%3D";
 
             String pageNo = Integer.toString(i);
@@ -250,7 +234,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
             ParkingZone_API dust = new ParkingZone_API(queryUrl, i);
             dust.execute();
-        }
+        }*/
+
+        ParkingZone_API.getParkingData();
 
         freeParkingZone_name = ParkingZone_API.free_name;
         freeParkingZone_addr = ParkingZone_API.free_addr;
