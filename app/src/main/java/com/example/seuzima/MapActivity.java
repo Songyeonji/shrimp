@@ -12,6 +12,7 @@ import androidx.fragment.app.FragmentTransaction;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -35,6 +36,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     // 위치 정보 사용 권한 허락했는지 확인할 때 비교하는 변수 (권한을 허락했을 때 1000을 반환하는 모양..)
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1000;
+
 
     // 사용자 위치정보 저장하는 변수
     private FusedLocationSource locationSource;
@@ -204,12 +206,31 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     // 배열 변수에 저장하도록 함. api를 처음 실행할 때 한번만 사용해서 데이터를 가져와서 저장하고
     // 이후에는 배열 변수에 저장된 데이터를 사용하는 방식으로 하기 위함.
     private void getNoParkingData() {
+        new NaverApiTask().execute();
         noParkingZone_API.getNoParkingData();
         noParkingZone_name = noParkingZone_API.name;
         noParkingZone_addr = noParkingZone_API.addr;
         noParkingZone_lat = noParkingZone_API.lat;
         noParkingZone_lon = noParkingZone_API.lon;
 
+    }
+
+    private class NaverApiTask extends AsyncTask<Void, Void, String> {
+
+        @Override
+        protected String doInBackground(Void... voids) {
+            // ApiExamSearchBlog 클래스의 main 메서드 호출
+            SEARCH_API.main(new String[]{});
+
+            // 여기에서는 비동기적으로 호출되기 때문에 결과가 없거나 기다리지 않는 것이 좋습니다.
+            return "ApiExamSearchBlog.main 호출 완료";
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            // 결과로 UI 업데이트
+            Log.d("result:", result);
+        }
     }
 
     // 주차장 api에서 데이터 가져오기 (가져오는데 시간이 많이 소요됨..ㅠㅠ)
