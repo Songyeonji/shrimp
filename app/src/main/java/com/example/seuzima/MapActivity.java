@@ -12,6 +12,8 @@ import androidx.fragment.app.FragmentTransaction;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -19,6 +21,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 
 import com.naver.maps.geometry.LatLng;
+import com.naver.maps.map.CameraUpdate;
 import com.naver.maps.map.LocationTrackingMode;
 import com.naver.maps.map.MapFragment;
 import com.naver.maps.map.NaverMap;
@@ -80,8 +83,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private Boolean noParking = Boolean.FALSE;
     private Boolean paidParking = Boolean.FALSE;
     private Boolean freeParking = Boolean.FALSE;
-    private int num=-1;
-    private String tag;
+
+    private Marker before_marker;
+    private Marker loc_marker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,6 +113,42 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         }
         locationSource =
                 new FusedLocationSource(this, LOCATION_PERMISSION_REQUEST_CODE);
+
+
+    }
+    private void intent_map() {
+        Intent getintent = getIntent();
+        String name = getintent.getStringExtra("loc_name");
+        String addr = getintent.getStringExtra("loc_addr");
+        int x = getintent.getIntExtra("loc_x",0);
+        int y = getintent.getIntExtra("loc_y", 0);
+
+        if (x!=0 && y!=0) {
+            Double lat = y/Math.pow(10,7);
+            Double lon = x/Math.pow(10,7);
+
+
+            loc_marker = new Marker();
+            loc_marker.setPosition(new LatLng(lat, lon));
+            loc_marker.setIconTintColor(Color.BLUE);
+            loc_marker.setMap(naverMap);
+            Log.d("lat/lon: ", lat.toString()+" | "+lon.toString());
+            CameraUpdate cameraUpdate = CameraUpdate.scrollTo(new LatLng(lat, lon));
+            naverMap.moveCamera(cameraUpdate);
+
+            show_Bottom_Location(name, addr, lat, lon);
+        } else {
+            set_user_location(naverMap);
+        }
+    }
+
+    public void set_up(View view) {
+        if (loc_marker!=null) {
+            loc_marker.setMap(null);
+            show_searchingLayout();
+        }
+
+        set_user_location(naverMap);
 
     }
 
@@ -161,7 +201,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     public void onMapReady(@NonNull NaverMap naverMap) {
         this.naverMap = naverMap;
 //        naverMap.setLocationSource(locationSource);
-        set_user_location(naverMap);
+        intent_map();
+
 
     }
 
@@ -178,6 +219,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     }
 
     private void show_Bottom_Location(String name, String addr, Double lat, Double lon) {
+
         LinearLayout search_layout = findViewById(R.id.search_layout);
         search_layout.setVisibility(View.GONE);
         final int[] mainLayoutHeight = {0};
@@ -339,22 +381,20 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         marker.setMap(naverMap);
 
         Overlay.OnClickListener listener = overlay -> {
-            Log.d("num:", String.valueOf(num));
-            if (num != -1) {
-                String before_tag = tag;
+            if (before_marker!=null) {
+                String tag = (String) before_marker.getTag();
                 Log.d("tag:", tag);
-                Marker before_marker = new Marker();
-                if (before_tag.equals("noParking")) {
-                    Log.d("tag11:", tag);
-                    /*before_marker = noParking_markerList.get(num);
-                    before_marker.setPosition(new LatLng(noParkingZone_lat[num], noParkingZone_lon[num]));
-                    before_marker.setIcon(OverlayImage.fromResource(R.drawable.dallar_icon));*/
-                } else if (before_tag.equals("paid")) {
-                    paid_markerList.get(num).setIcon(OverlayImage.fromResource(R.drawable.dallar_icon));
-                    paid_markerList.get(num).setMap(naverMap);
+
+                if (tag.equals("noParking")) {
+                    before_marker.setIcon(OverlayImage.fromResource(R.drawable.nopark_icon));
+                    before_marker.setMap(naverMap);
+
+                } else if (tag.equals("paid")) {
+                    before_marker.setIcon(OverlayImage.fromResource(R.drawable.dallar_icon));
+                    before_marker.setMap(naverMap);
                 } else {
-                    free_markerList.get(num).setIcon(OverlayImage.fromResource(R.drawable.free_icon));
-                    free_markerList.get(num).setMap(naverMap);
+                    before_marker.setIcon(OverlayImage.fromResource(R.drawable.free_icon));
+                    before_marker.setMap(naverMap);
                 }
 
                 before_marker.setWidth(80);
@@ -367,10 +407,10 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             LatLng latLng = markers.getPosition();
             Double lat = latLng.latitude;
             Double lon = latLng.longitude;
+            before_marker=marker;
             marker.setPosition(new LatLng(lat, lon));
             String names = null;
             String addr = null;
-            tag = (String) marker.getTag();
             if (marker.getTag().equals("noParking")) {
                 Log.d("clikc ltlng:", lat.toString()+" | "+lon.toString());
                 marker.setIcon(OverlayImage.fromResource(R.drawable.selected_nopark_icon));
@@ -379,7 +419,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 int n = 0;
 
                 while (!(noParkingZone_lat[n].equals(lat) && noParkingZone_lon[n].equals(lon))) {
-                    num = n;
                     if (noParkingZone_lat[n].equals(lat) && noParkingZone_lon[n].equals(lon)) {
 
                         break;
@@ -394,7 +433,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 marker.setWidth(100);
                 marker.setHeight(130);
                 while (!(paidParkingZone_lat[n].equals(lat) && paidParkingZone_lon[n].equals(lon))) {
-                    num = n;
                     if (paidParkingZone_lat[n].equals(lat) && paidParkingZone_lon[n].equals(lon)) {
 
                         break;
@@ -409,7 +447,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 marker.setWidth(100);
                 marker.setHeight(130);
                 while (!(freeParkingZone_lat[n].equals(lat) && freeParkingZone_lon[n].equals(lon))) {
-                    num = n;
                     if (freeParkingZone_lat[n].equals(lat) && freeParkingZone_lon[n].equals(lon)) {
 
                         break;

@@ -80,14 +80,14 @@ public class Bottom_LocationInform extends Fragment {
             }
         });
 
-//        ImageView bttnDelete = rootview.findViewById(R.id.delete_bttn);
-       /* bttnDelete.setOnClickListener(new View.OnClickListener() {
+        ImageView bttnDelete = rootview.findViewById(R.id.delete_bttn);
+        bttnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 MapActivity mapActivity = (MapActivity) getActivity();
                 mapActivity.show_searchingLayout();
             }
-        });*/
+        });
 
         return rootview;
     }

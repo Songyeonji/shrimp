@@ -1,7 +1,13 @@
 package com.example.seuzima;
 
 // 네이버 검색 API 예제 - 블로그 검색
+import android.content.Context;
 import android.util.Log;
+import android.view.LayoutInflater;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.*;
 import java.net.HttpURLConnection;
@@ -14,21 +20,29 @@ import java.util.Map;
 
 public class SEARCH_API {
 
+    private static String name;
+    private static String addr;
+    private static int x;
+    private static int y;
+    private static String link;
+    private static String category;
+    private static String tel;
 
-    public static void main(String[] args) {
+
+    public static void main(String args) throws JSONException {
         String clientId = "_mGhuJl_G59um5hr3hqz"; //애플리케이션 클라이언트 아이디
         String clientSecret = "pZgnKmwxPB"; //애플리케이션 클라이언트 시크릿
 
 
         String text = null;
         try {
-            text = URLEncoder.encode("청년다방", "UTF-8");
+            text = URLEncoder.encode(args, "UTF-8");
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException("검색어 인코딩 실패",e);
         }
 
 
-        String apiURL = "https://openapi.naver.com/v1/search/local.json?query=" + text;    // JSON 결과
+        String apiURL = "https://openapi.naver.com/v1/search/local.json?query=" + text + "&display=10&start=1&sort=random";    // JSON 결과
         //String apiURL = "https://openapi.naver.com/v1/search/blog.xml?query="+ text; // XML 결과
 
 
@@ -37,6 +51,30 @@ public class SEARCH_API {
         requestHeaders.put("X-Naver-Client-Secret", clientSecret);
         String responseBody = get(apiURL,requestHeaders);
 
+        JSONObject jsonObject = new JSONObject(responseBody);
+//                        JSONObject response = jsonObject.getJSONObject("response");
+//                        JSONObject body = response.getJSONObject("body");
+        int total = jsonObject.getInt("total");
+        JSONArray items = jsonObject.getJSONArray("items");
+
+        Log.d("totla:", String.valueOf(total));
+        for (int i=0; i<items.length();i++) {
+            JSONObject data = items.getJSONObject(i);
+            name = data.getString("title");
+            addr = data.getString("address");
+            x = data.getInt("mapx");
+            y = data.getInt("mapy");
+            link = data.getString("link");
+            category = data.getString("category");
+            tel = data.getString("telephone");
+
+            name = name.replace("<b>", "");
+            name = name.replace("</b>", " ");
+
+            ((Search) Search.context).searched(name, addr, x, y);
+
+
+        }
 
         Log.d("searching:", responseBody);
     }
