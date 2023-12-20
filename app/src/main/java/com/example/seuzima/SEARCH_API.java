@@ -71,7 +71,7 @@ public class SEARCH_API {
             name = name.replace("<b>", "");
             name = name.replace("</b>", " ");
 
-            ((Search) Search.context).searched(name, addr, x, y);
+            ((Search) Search.context).searched(name, addr, x, y, link, tel, category);
 
 
         }

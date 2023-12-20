@@ -99,6 +99,8 @@ public class Bottom_LocationInform extends Fragment {
 
         TextView loc_title = view.findViewById(R.id.loc_title);
         TextView loc_addr = view.findViewById(R.id.loc_addr);
+        TextView loc_tel = view.findViewById(R.id.loc_tel);
+        TextView loc_link = view.findViewById(R.id.loc_link);
 
 
         // mapview에서 받아온 위치 정보(이름, 주소, 위경도) 가져와서 문자열 및 double 변수에 저장
@@ -106,11 +108,28 @@ public class Bottom_LocationInform extends Fragment {
         addr = this.getArguments().getString("loc_addr");
         latitude = this.getArguments().getDouble("loc_lat");
         longitude = this.getArguments().getDouble("loc_lon");
+        String link = this.getArguments().getString("loc_link");
+        String tel = this.getArguments().getString("loc_tel");
         //"loc_lon", longitude
 
         // 장소 이름, 주소는 각각 textview에 저장
         loc_title.setText(title);
         loc_addr.setText(addr);
+        if (tel.equals("")) {
+
+            view.findViewById(R.id.tel_layout).setVisibility(View.GONE);
+        } else {
+            loc_tel.setText(tel);
+        }
+        if (link.equals("")) {
+            view.findViewById(R.id.web_layout).setVisibility(View.GONE);
+
+        } else {
+            loc_link.setText(link);
+        }
+
+
+
     }
 
     // '도착' 버튼 클릭 시 MainActivity로 이동 + 장소 이름, 주소, 위경도 정보 같이 intent

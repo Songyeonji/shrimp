@@ -27,7 +27,7 @@
             android:textStyle="bold"
             android:textSize="24dp"
             android:layout_weight="1"
-            android:textColor="#614822"/>
+            android:textColor="#21314C"/>
 
         <ImageView
             android:id="@+id/delete_bttn"
@@ -38,16 +38,72 @@
     </LinearLayout>
 
 
-
-    <TextView
-        android:id="@+id/loc_addr"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="주소"
-        android:textColor="#777777"
-        android:textSize="18dp"
-        android:textStyle="bold"
-        android:layout_marginTop="10dp"/>
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp">
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:src="@drawable/loc_icon"
+            android:layout_marginRight="10dp"/>
+        <TextView
+            android:id="@+id/loc_addr"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="주소"
+            android:textColor="#777777"
+            android:textSize="18dp"
+            android:textStyle="bold"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/tel_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp">
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:src="@drawable/tel_icon"
+            android:layout_marginRight="10dp"/>
+        <TextView
+            android:id="@+id/loc_tel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="   "
+            android:textColor="#777777"
+            android:textSize="18dp"
+            android:textStyle="bold"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/web_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp">
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:src="@drawable/web_icon"
+            android:layout_marginRight="10dp"/>
+        <TextView
+            android:id="@+id/loc_link"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="   "
+            android:textColor="#777777"
+            android:textSize="18dp"
+            android:textStyle="bold"/>
+    </LinearLayout>
+
+
 
     <View
         android:layout_width="match_parent"

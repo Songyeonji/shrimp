@@ -128,7 +128,7 @@ public class Search extends AppCompatActivity {
 
 
     // 사용자가 검색창에서 '엔터'를 눌렀을 때 실행되는 함수
-    public void searched(String name, String address, int x, int y){
+    public void searched(String name, String address, int x, int y, String link, String tel, String category){
 
 
         loc_inform_view = (LinearLayout) findViewById(R.id.loc_inform_view);
@@ -140,11 +140,17 @@ public class Search extends AppCompatActivity {
         TextView searched_address = l_sub.findViewById(R.id.loc_inform_detail1);
         TextView searched_lati = l_sub.findViewById(R.id.longi1);
         TextView searched_longi = l_sub.findViewById(R.id.lati1);
+        TextView searched_category = l_sub.findViewById(R.id.text_category);
+        TextView searched_link = l_sub.findViewById(R.id.link);
+        TextView searched_tel = l_sub.findViewById(R.id.tel);
 
         searched_name.setText(name);
         searched_address.setText(address);
         searched_lati.setText(String.valueOf(x));
         searched_longi.setText(String.valueOf(y));
+        searched_category.setText(category);
+        searched_link.setText(link);
+        searched_tel.setText(tel);
 
         LinearLayout search_list = l_sub.findViewById(R.id.linear_list);
         search_list.setOnClickListener(new View.OnClickListener() {
@@ -154,17 +160,26 @@ public class Search extends AppCompatActivity {
                 TextView click_address = search_list.findViewById(R.id.loc_inform_detail1);
                 TextView click_lati = l_sub.findViewById(R.id.longi1);
                 TextView click_longi = l_sub.findViewById(R.id.lati1);
+                TextView click_category = search_list.findViewById(R.id.text_category);
+                TextView click_link = l_sub.findViewById(R.id.link);
+                TextView click_tel = l_sub.findViewById(R.id.tel);
 
                 String c_name = click_name.getText().toString();
                 String c_addr = click_address.getText().toString();
                 int c_x = Integer.parseInt(click_lati.getText().toString());
                 int c_y = Integer.parseInt(click_longi.getText().toString());
+                String c_category = click_category.getText().toString();
+                String c_link = click_link.getText().toString();
+                String c_tel = click_tel.getText().toString();
 
                 Intent go_mapview = new Intent(Search.this, MapActivity.class);
                 go_mapview.putExtra("loc_name", c_name);
                 go_mapview.putExtra("loc_addr", c_addr);
                 go_mapview.putExtra("loc_x", c_x);
                 go_mapview.putExtra("loc_y", c_y);
+                go_mapview.putExtra("loc_category", c_category);
+                go_mapview.putExtra("loc_link", c_link);
+                go_mapview.putExtra("loc_tel", c_tel);
 
                 startActivity(go_mapview);
             }

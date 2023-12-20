@@ -4,6 +4,7 @@ import static android.content.ContentValues.TAG;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentManager;
@@ -18,8 +19,11 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.naver.maps.geometry.LatLng;
 import com.naver.maps.map.CameraUpdate;
 import com.naver.maps.map.LocationTrackingMode;
@@ -122,6 +126,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         String addr = getintent.getStringExtra("loc_addr");
         int x = getintent.getIntExtra("loc_x",0);
         int y = getintent.getIntExtra("loc_y", 0);
+        String category = getintent.getStringExtra("loc_category");
+        String link = getintent.getStringExtra("loc_link");
+        String tel = getintent.getStringExtra("loc_tel");
 
         if (x!=0 && y!=0) {
             Double lat = y/Math.pow(10,7);
@@ -136,7 +143,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             CameraUpdate cameraUpdate = CameraUpdate.scrollTo(new LatLng(lat, lon));
             naverMap.moveCamera(cameraUpdate);
 
-            show_Bottom_Location(name, addr, lat, lon);
+            show_Bottom_Location(name, addr, lat, lon, link, tel, category);
         } else {
             set_user_location(naverMap);
         }
@@ -218,12 +225,38 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     }
 
-    private void show_Bottom_Location(String name, String addr, Double lat, Double lon) {
+    private void show_Bottom_Location(String name, String addr, Double lat, Double lon, String link, String tel, String category) {
 
         LinearLayout search_layout = findViewById(R.id.search_layout);
         search_layout.setVisibility(View.GONE);
         final int[] mainLayoutHeight = {0};
 
+        int screenHeight = getResources().getDisplayMetrics().heightPixels;
+
+        FrameLayout main_content = findViewById(R.id.main_content);
+
+
+        BottomSheetBehavior bottomSheetBehavior_loc = BottomSheetBehavior.from(main_content);
+        bottomSheetBehavior_loc.setPeekHeight(getResources().getDimensionPixelSize(R.dimen.main_layout_height));
+        bottomSheetBehavior_loc.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+            @Override
+            public void onStateChanged(@NonNull View bottomSheet, int newState) {
+
+                int bottomSheetHeight = 400;
+                if (newState == BottomSheetBehavior.STATE_EXPANDED) {
+                    bottomSheetHeight = (int) (bottomSheet.getHeight()) - 150;
+                }
+                mainLayoutHeight[0] = screenHeight - bottomSheetHeight;
+                findViewById(R.id.map_fragment).setLayoutParams(new CoordinatorLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, mainLayoutHeight[0]));
+            }
+
+            @Override
+            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+                int bottomSheetHeight = (int) (bottomSheet.getHeight() * slideOffset);
+                mainLayoutHeight[0] = screenHeight - bottomSheetHeight;
+                findViewById(R.id.map_fragment).setLayoutParams(new CoordinatorLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, mainLayoutHeight[0]));
+            }
+        });
         findViewById(R.id.main_content).setVisibility(View.VISIBLE);
 
         Bundle bundle = new Bundle();
@@ -231,6 +264,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         bundle.putString("loc_addr", addr);
         bundle.putDouble("loc_lat", lat);
         bundle.putDouble("loc_lon", lon);
+        bundle.putString("loc_link", link);
+        bundle.putString("loc_tel", tel);
+        bundle.putString("loc_category", category);
 
         bottom_locationInform = new Bottom_LocationInform();
         bottom_locationInform.setArguments(bundle);
@@ -411,7 +447,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             marker.setPosition(new LatLng(lat, lon));
             String names = null;
             String addr = null;
+            String category = null;
             if (marker.getTag().equals("noParking")) {
+                category = "주정차 금지구역";
                 Log.d("clikc ltlng:", lat.toString()+" | "+lon.toString());
                 marker.setIcon(OverlayImage.fromResource(R.drawable.selected_nopark_icon));
                 marker.setWidth(100);
@@ -428,6 +466,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 names = noParkingZone_name[n];
                 addr = noParkingZone_addr[n];
             } else if (marker.getTag().equals("paid")) {
+                category = "유료 주차장";
                 int n = 0;
                 marker.setIcon(OverlayImage.fromResource(R.drawable.selected_dallar_icon));
                 marker.setWidth(100);
@@ -442,6 +481,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 names = paidParkingZone_name[n];
                 addr = paidParkingZone_addr[n];
             } else {
+                category = "무료 주차장";
                 int n = 0;
                 marker.setIcon(OverlayImage.fromResource(R.drawable.selected_free_icon));
                 marker.setWidth(100);
@@ -459,7 +499,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
             }
             marker.setMap(naverMap);
-            show_Bottom_Location(names, addr, lat, lon);
+            show_Bottom_Location(names, addr, lat, lon,"","",category);
             return true;
         };
         marker.setOnClickListener(listener);

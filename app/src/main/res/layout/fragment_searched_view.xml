@@ -38,7 +38,9 @@
                         android:layout_height="wrap_content"
                         android:textSize="20dp"
                         android:layout_marginLeft="10dp"
+                        android:layout_weight="3"
                         android:text="한남대"/>
+
                     <TextView
                         android:id="@+id/loc_inform_detail1"
                         android:layout_width="wrap_content"
@@ -58,6 +60,14 @@
 
 
                     <TextView
+                        android:id="@+id/text_category"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="카테고리"
+                        android:layout_weight="1"
+                        android:textSize="18dp"
+                        android:gravity="right"/>
+                    <TextView
                         android:id="@+id/longi1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -67,6 +77,22 @@
                         />
                     <TextView
                         android:id="@+id/lati1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="lati"
+                        android:layout_margin="5dp"
+                        android:visibility="gone"
+                        />
+                    <TextView
+                        android:id="@+id/tel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="longi"
+                        android:layout_margin="5dp"
+                        android:visibility="gone"
+                        />
+                    <TextView
+                        android:id="@+id/link"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="lati"
