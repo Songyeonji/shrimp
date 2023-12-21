@@ -104,7 +104,7 @@ public class NAVI_API extends AsyncTask<Void, Void, String> {
             /*path.setColor(Color.rgb(90, 156, 242));
             path.setPassedColor(Color.GRAY);*/
             path.setColor(Color.argb(50, 90, 156, 242));
-            path.setMap(MapActivity.naverMap);
+            path.setMap(MapFragment.naverMap);
 
 
 

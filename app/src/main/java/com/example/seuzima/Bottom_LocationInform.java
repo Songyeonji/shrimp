@@ -1,17 +1,14 @@
 package com.example.seuzima;
 
 
-import static com.example.seuzima.MapActivity.user_lat;
-import static com.example.seuzima.MapActivity.user_lon;
 
-import android.graphics.Color;
-import android.os.AsyncTask;
+import static com.example.seuzima.MapFragment.user_lat;
+import static com.example.seuzima.MapFragment.user_lon;
+
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -20,27 +17,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.naver.maps.geometry.LatLng;
 import com.naver.maps.map.overlay.PathOverlay;
 
 import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.URL;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.List;
-
-import javax.net.ssl.HttpsURLConnection;
-
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
 
 public class Bottom_LocationInform extends Fragment {
 
@@ -84,8 +65,8 @@ public class Bottom_LocationInform extends Fragment {
         bttnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MapActivity mapActivity = (MapActivity) getActivity();
-                mapActivity.show_searchingLayout();
+                MainActivity mainActivity = (MainActivity) getActivity();
+                mainActivity.show_searchingLayout();
             }
         });
 
@@ -134,6 +115,8 @@ public class Bottom_LocationInform extends Fragment {
 
     // '도착' 버튼 클릭 시 MainActivity로 이동 + 장소 이름, 주소, 위경도 정보 같이 intent
     public void set_destPoint() {
+
+        ((MainActivity) getActivity()).set_preview_content("내 위치", title);
         NAVI_API dust = new NAVI_API(user_lat, user_lon, latitude, longitude);
         dust.execute();
     }

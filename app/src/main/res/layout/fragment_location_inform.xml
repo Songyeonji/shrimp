@@ -104,7 +104,25 @@
     </LinearLayout>
 
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#cccccc"
+        android:layout_marginVertical="10dp"/>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:onClick="show_detail_locationI">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="더보기"
+            android:textSize="18dp"
+            android:layout_gravity="center"
+            android:textColor="#939393"/>
 
+    </FrameLayout>
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"

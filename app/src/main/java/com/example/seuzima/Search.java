@@ -17,12 +17,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
-import java.io.InputStream;
 
 public class Search extends AppCompatActivity {
 
@@ -172,7 +167,7 @@ public class Search extends AppCompatActivity {
                 String c_link = click_link.getText().toString();
                 String c_tel = click_tel.getText().toString();
 
-                Intent go_mapview = new Intent(Search.this, MapActivity.class);
+                Intent go_mapview = new Intent(Search.this, MainActivity.class);
                 go_mapview.putExtra("loc_name", c_name);
                 go_mapview.putExtra("loc_addr", c_addr);
                 go_mapview.putExtra("loc_x", c_x);
@@ -223,7 +218,7 @@ public class Search extends AppCompatActivity {
 
     // '<' 버튼 클릭하면 실행되는 함수. 이전 '홈'화면으로 되돌아가는 코드
     public void before(View view) {
-        Intent intent_before = new Intent(Search.this, MapActivity.class);
+        Intent intent_before = new Intent(Search.this, MainActivity.class);
         startActivity(intent_before);
     }
 
