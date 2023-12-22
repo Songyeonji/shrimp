@@ -102,6 +102,20 @@
             android:textStyle="bold"/>
     </LinearLayout>
 
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:clickable="true"
+        android:onClick="show_full_view">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="더보기"
+            android:textSize="17dp"/>
+    </FrameLayout>
+
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"

@@ -114,6 +114,10 @@ public class Bottom_LocationInform extends Fragment {
 
     }
 
+    public void show_full_view(View view) {
+
+    }
+
     // '도착' 버튼 클릭 시 MainActivity로 이동 + 장소 이름, 주소, 위경도 정보 같이 intent
     public void set_destPoint() {
         NAVI_API dust = new NAVI_API("내 위치", title, user_lat, user_lon, latitude, longitude);

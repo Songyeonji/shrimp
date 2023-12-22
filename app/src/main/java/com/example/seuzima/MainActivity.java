@@ -18,6 +18,7 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
 import com.naver.maps.geometry.LatLng;
@@ -67,6 +68,16 @@ public class MainActivity extends AppCompatActivity {
     private Marker before_marker;
     private MapFragment mapFragment;
 
+    private LocationFullFragment locationFullFragment;
+
+    private String name;
+    private String addr;
+    private Double lat;
+    private Double lon;
+    private String category;
+    private String link;
+    private String tel;
+
     // Manifest에서 설정된 권한 정보 가져오기
     private static final String[] PERMISSIONS = {
             android.Manifest.permission.ACCESS_FINE_LOCATION,
@@ -104,17 +115,17 @@ public class MainActivity extends AppCompatActivity {
 
     public void set_init() {
         Intent getintent = getIntent();
-        String name = getintent.getStringExtra("loc_name");
-        String addr = getintent.getStringExtra("loc_addr");
+        name = getintent.getStringExtra("loc_name");
+        addr = getintent.getStringExtra("loc_addr");
         int x = getintent.getIntExtra("loc_x",0);
         int y = getintent.getIntExtra("loc_y", 0);
-        String category = getintent.getStringExtra("loc_category");
-        String link = getintent.getStringExtra("loc_link");
-        String tel = getintent.getStringExtra("loc_tel");
+        category = getintent.getStringExtra("loc_category");
+        link = getintent.getStringExtra("loc_link");
+        tel = getintent.getStringExtra("loc_tel");
 
         if (x!=0 && y!=0) {
-            Double lat = y/Math.pow(10,7);
-            Double lon = x/Math.pow(10,7);
+            lat = y/Math.pow(10,7);
+            lon = x/Math.pow(10,7);
 
             mapFragment.location_marker(lat, lon);
             show_Bottom_Location(name, addr, lat, lon, link, tel, category);
@@ -177,13 +188,12 @@ public class MainActivity extends AppCompatActivity {
             Marker markers = (Marker) overlay;
 
             LatLng latLng = markers.getPosition();
-            Double lat = latLng.latitude;
-            Double lon = latLng.longitude;
+            lat = latLng.latitude;
+            lon = latLng.longitude;
             before_marker=marker;
             marker.setPosition(new LatLng(lat, lon));
             String names = null;
-            String addr = null;
-            String category = null;
+
             if (marker.getTag().equals("noParking")) {
                 category = "주정차 금지구역";
                 Log.d("clikc ltlng:", lat.toString()+" | "+lon.toString());
@@ -337,6 +347,11 @@ public class MainActivity extends AppCompatActivity {
         }
     }
     public void show_searchingLayout() {
+        if (findViewById(R.id.home_content).getVisibility()==View.GONE) {
+            findViewById(R.id.home_content).setVisibility(View.VISIBLE);
+            findViewById(R.id.full_view).setVisibility(View.GONE);
+        }
+
         findViewById(R.id.search_layout).setVisibility(View.VISIBLE);
         // FragmentTransaction 시작
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
@@ -423,6 +438,25 @@ public class MainActivity extends AppCompatActivity {
 
         mapFragment.set_user_location(naverMap);
 
+    }
+
+    public void show_full_view(View view) {
+        findViewById(R.id.home_content).setVisibility(View.GONE);
+        FrameLayout full_view = findViewById(R.id.full_view);
+        full_view.setVisibility(View.VISIBLE);
+
+        Bundle bundle = new Bundle();
+        bundle.putString("loc_name", name);
+        bundle.putString("loc_addr", addr);
+        bundle.putDouble("loc_lat", lat);
+        bundle.putDouble("loc_lon", lon);
+        bundle.putString("loc_link", link);
+        bundle.putString("loc_tel", tel);
+        bundle.putString("loc_category", category);
+
+        locationFullFragment = new LocationFullFragment();
+        locationFullFragment.setArguments(bundle);
+        getSupportFragmentManager().beginTransaction().replace(R.id.full_view, locationFullFragment).commit();
     }
 
     public void set_preview_content(String start, String dest) {
