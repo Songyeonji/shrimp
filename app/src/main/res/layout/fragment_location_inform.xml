@@ -11,7 +11,6 @@
     app:layout_behavior="@string/bottom_sheet_behavior"
     tools:context=".Bottom_LocationInform">
 
-    <!-- TODO: Update blank fragment layout -->
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -25,14 +24,14 @@
             android:layout_height="wrap_content"
             android:text="장소 이름"
             android:textStyle="bold"
-            android:textSize="24dp"
+            android:textSize="20dp"
             android:layout_weight="1"
             android:textColor="#21314C"/>
 
         <ImageView
             android:id="@+id/delete_bttn"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:src="@drawable/x_icon"
             android:clickable="true"/>
     </LinearLayout>
@@ -55,7 +54,7 @@
             android:layout_height="wrap_content"
             android:text="주소"
             android:textColor="#777777"
-            android:textSize="18dp"
+            android:textSize="16dp"
             android:textStyle="bold"/>
     </LinearLayout>
 
@@ -77,7 +76,7 @@
             android:layout_height="wrap_content"
             android:text="   "
             android:textColor="#777777"
-            android:textSize="18dp"
+            android:textSize="16dp"
             android:textStyle="bold"/>
     </LinearLayout>
 
@@ -99,30 +98,10 @@
             android:layout_height="wrap_content"
             android:text="   "
             android:textColor="#777777"
-            android:textSize="18dp"
+            android:textSize="16dp"
             android:textStyle="bold"/>
     </LinearLayout>
 
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#cccccc"
-        android:layout_marginVertical="10dp"/>
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:clickable="true"
-        android:onClick="show_detail_locationI">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="더보기"
-            android:textSize="18dp"
-            android:layout_gravity="center"
-            android:textColor="#939393"/>
-
-    </FrameLayout>
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
@@ -140,8 +119,8 @@
             android:id="@+id/bttn_start"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingVertical="10dp"
-            android:paddingHorizontal="30dp"
+            android:paddingVertical="6dp"
+            android:paddingHorizontal="25dp"
             android:background="@drawable/round_button"
             android:clickable="true"
             android:layout_marginLeft="7dp">
@@ -150,7 +129,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="출발"
-                android:textSize="20dp"
+                android:textSize="18dp"
+                android:textColor="@color/main_blue"
                 android:textStyle="bold"/>
         </FrameLayout>
 
@@ -158,8 +138,8 @@
             android:id="@+id/bttn_dest"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingVertical="10dp"
-            android:paddingHorizontal="30dp"
+            android:paddingVertical="6dp"
+            android:paddingHorizontal="25dp"
             android:background="@drawable/round_button"
             android:backgroundTint="@color/main_blue"
             android:clickable="true"
@@ -170,10 +150,16 @@
                 android:layout_height="wrap_content"
                 android:text="도착"
                 android:textColor="@color/white"
-                android:textSize="20dp"
+                android:textSize="18dp"
                 android:textStyle="bold"/>
         </FrameLayout>
 
     </LinearLayout>
+    <!-- TODO: Update blank fragment layout -->
+
+
+
+
+
 
 </LinearLayout>

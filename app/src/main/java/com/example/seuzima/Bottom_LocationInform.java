@@ -6,6 +6,7 @@ import static com.example.seuzima.MapFragment.user_lat;
 import static com.example.seuzima.MapFragment.user_lon;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -115,10 +116,10 @@ public class Bottom_LocationInform extends Fragment {
 
     // '도착' 버튼 클릭 시 MainActivity로 이동 + 장소 이름, 주소, 위경도 정보 같이 intent
     public void set_destPoint() {
-
-        ((MainActivity) getActivity()).set_preview_content("내 위치", title);
-        NAVI_API dust = new NAVI_API(user_lat, user_lon, latitude, longitude);
+        NAVI_API dust = new NAVI_API("내 위치", title, user_lat, user_lon, latitude, longitude);
         dust.execute();
+
+
     }
 
     public void set_startPoint() {

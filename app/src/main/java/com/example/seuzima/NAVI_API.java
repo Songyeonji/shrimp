@@ -3,6 +3,7 @@ package com.example.seuzima;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.TextView;
 
 import com.naver.maps.geometry.LatLng;
 import com.naver.maps.map.overlay.PathOverlay;
@@ -24,13 +25,19 @@ public class NAVI_API extends AsyncTask<Void, Void, String> {
     Double startLon;
     Double destLat;
     Double destLon;
+    String start;
+    String dest;
     public static JSONArray pathArray;
     public static JSONArray guideArray;
     int num;
     public static PathOverlay path;
     public static ArrayList<JSONArray> guide_points;
+    public static int duration;
+    public static int distance;
 
-    public NAVI_API(Double startLat, Double startLon, Double destLat, Double destLon) {
+    public NAVI_API(String start, String dest, Double startLat, Double startLon, Double destLat, Double destLon) {
+        this.start = start;
+        this.dest = dest;
         this.startLat = startLat;
         this.startLon = startLon;
         this.destLat = destLat;
@@ -51,7 +58,7 @@ public class NAVI_API extends AsyncTask<Void, Void, String> {
         try {
             Response response = client.newCall(request).execute();
             String responseJson = response.body().string();
-            Log.d("Response", responseJson);
+//            Log.d("Response", responseJson);
             return responseJson;
         } catch (IOException e) {
             e.printStackTrace();
@@ -64,7 +71,7 @@ public class NAVI_API extends AsyncTask<Void, Void, String> {
     protected void onPostExecute(String responseJson) {
         if (responseJson != null) {
             // TODO: JSON 데이터 처리
-            Log.d("Response1", responseJson);
+//            Log.d("Response1", responseJson);
             read_json(responseJson);
         } else {
             Log.e("Error", "Network request failed");
@@ -79,9 +86,9 @@ public class NAVI_API extends AsyncTask<Void, Void, String> {
             pathArray = Object.getJSONArray("path");
             guideArray = Object.getJSONArray("guide");
             guide_points = new ArrayList<JSONArray>();
-            Log.d("Object", Object.toString());
+//            Log.d("Object", Object.toString());
 
-            Log.d("path", pathArray.getString(0));
+//            Log.d("path", pathArray.getString(0));
             path = new PathOverlay();
 
             List<LatLng> coords = new ArrayList<>();
@@ -96,8 +103,16 @@ public class NAVI_API extends AsyncTask<Void, Void, String> {
                 }
             }
 
-            Log.d("guidePoints", guide_points.toString());
-            Log.d("Coords", coords.toString());
+            duration = Object.getJSONObject("summary").getInt("duration")/1000/60;
+
+            distance = Object.getJSONObject("summary").getInt("distance")/100;
+
+            ((MainActivity) MainActivity.context).set_preview_content(start, dest);
+
+            Log.d("dur:", String.valueOf(duration));
+            Log.d("dis:", String.valueOf(distance));
+            /*Log.d("guidePoints", guide_points.toString());
+            Log.d("Coords", coords.toString());*/
             path.setCoords(coords);
             path.setOutlineWidth(0);
             path.setWidth(25);
