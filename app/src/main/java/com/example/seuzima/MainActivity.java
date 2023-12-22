@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
     private String tel;
 
     // Manifest에서 설정된 권한 정보 가져오기
-    private static final String[] PERMISSIONS = {
+    public static final String[] PERMISSIONS = {
             android.Manifest.permission.ACCESS_FINE_LOCATION,
             Manifest.permission.ACCESS_COARSE_LOCATION
     };
@@ -134,12 +134,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    /*private set_map() {
-        FrameLayout map_layout = findViewById(R.id.map_fragment);
-        bottom_locationInform = new Bottom_LocationInform();
-        bottom_locationInform.setArguments(bundle);
-        getSupportFragmentManager().beginTransaction().replace(R.id.main_content, bottom_locationInform).commit();
-    }*/
 
     // 지도에 다중 marker 생성해서 출력하는 함수
     public Marker createMarker(NaverMap naverMap, double latitude, double longitude, String name) {
@@ -305,18 +299,6 @@ public class MainActivity extends AppCompatActivity {
         // 그래서 가져오는데 시간이 많이 걸림..
         // 총 데이터 = 719개..
 
-        /*for (int i = 1; i<=2; i++) {
-            String api_key = "5Q44AbprRae2DW%2FDurbwg83MQLdKuV9wx3jkkhdCcZNwYdEyIw43X8kzO2syrpPz%2FQ257YQOjs3RFF4OnA4QVQ%3D%3D";
-
-            String pageNo = Integer.toString(i);
-            String dataCount = "50";
-            String queryUrl = "https://apis.data.go.kr/6300000/pis/parkinglotIF?serviceKey="+api_key+
-                    "&numOfRows="+dataCount+"&pageNo="+pageNo;
-
-            ParkingZone_API dust = new ParkingZone_API(queryUrl, i);
-            dust.execute();
-        }*/
-
         ParkingZone_API.getParkingData();
 
         freeParkingZone_name = ParkingZone_API.free_name;
@@ -433,13 +415,18 @@ public class MainActivity extends AppCompatActivity {
     public void set_up(View view) {
         if (loc_marker!=null) {
             loc_marker.setMap(null);
-            ((MainActivity) MainActivity.context).show_searchingLayout();
+            show_searchingLayout();
         }
 
         mapFragment.set_user_location(naverMap);
 
     }
 
+    public void before_home(View view) {
+        NAVI_API.path.setMap(null);
+        findViewById(R.id.preview_content).setVisibility(View.GONE);
+        findViewById(R.id.home_content).setVisibility(View.VISIBLE);
+    }
     public void show_full_view(View view) {
         findViewById(R.id.home_content).setVisibility(View.GONE);
         FrameLayout full_view = findViewById(R.id.full_view);

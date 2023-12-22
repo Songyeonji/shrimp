@@ -78,6 +78,7 @@ public class NAVI_API extends AsyncTask<Void, Void, String> {
         }
     }
 
+
     public void read_json(String json) {
         //json 자료 가져오기
         try {
@@ -86,7 +87,7 @@ public class NAVI_API extends AsyncTask<Void, Void, String> {
             pathArray = Object.getJSONArray("path");
             guideArray = Object.getJSONArray("guide");
             guide_points = new ArrayList<JSONArray>();
-//            Log.d("Object", Object.toString());
+            Log.d("Object", Object.toString());
 
 //            Log.d("path", pathArray.getString(0));
             path = new PathOverlay();

@@ -18,6 +18,9 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".NaviActivity"
+            android:exported="false" />
+        <activity
             android:name=".RoutePreviewActivity"
             android:exported="false" />
         <activity
@@ -36,7 +39,7 @@
 
         <activity
             android:name=".MapActivity"
-            android:exported="true"></activity>
+            android:exported="true" />
         <activity
             android:name=".Search"
             android:exported="false" />

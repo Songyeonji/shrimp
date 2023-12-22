@@ -4,7 +4,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
 public class RoutePreviewActivity extends AppCompatActivity {
 
@@ -31,4 +33,6 @@ public class RoutePreviewActivity extends AppCompatActivity {
         // 트랜잭션 완료
         fragmentTransaction.commit();
     }
+
+
 }

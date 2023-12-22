@@ -1,5 +1,6 @@
 package com.example.seuzima;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -10,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 
@@ -25,6 +27,7 @@ public class PreviewFragment extends Fragment {
     TextView min_textView;
     TextView minN_textView;
     TextView dist_textView;
+    Button navi_button;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -46,6 +49,15 @@ public class PreviewFragment extends Fragment {
         minN_textView = view.findViewById(R.id.text_minN);
 
         dist_textView=view.findViewById(R.id.text_dist);
+
+        navi_button=view.findViewById(R.id.navi_button);
+        navi_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), NaviActivity.class);
+                startActivity(intent);
+            }
+        });
 
         set_text();
     }
@@ -78,5 +90,9 @@ public class PreviewFragment extends Fragment {
             Double km = Double.valueOf(Math.round(distance/1000*100)/100.0);
             dist_textView.setText(String.valueOf(km)+"km");
         }
+    }
+
+    public void before_home(View view) {
+
     }
 }

@@ -21,7 +21,7 @@
     <FrameLayout
         android:id="@+id/preview_content"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -56,71 +56,50 @@
                     android:orientation="horizontal"
                     android:layout_marginVertical="15dp">
 
-                    <LinearLayout
+                    <ImageView
                         android:id="@+id/button_noParking"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
                         android:layout_weight="1"
-                        android:background="@drawable/round_rec"
-                        android:orientation="vertical"
-                        android:layout_marginHorizontal="5dp"
+                        android:adjustViewBounds="true"
+                        android:src="@drawable/nopark_button"
                         android:gravity="center"
                         android:padding="5dp"
                         android:backgroundTint="#B7DAFA"
                         android:clickable="true"
                         android:onClick="show_noParkingZone">
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/white"
-                            android:textStyle="bold"
-                            android:text="주차금지"/>
-                    </LinearLayout>
+                    </ImageView>
 
-                    <LinearLayout
+                    <ImageView
                         android:id="@+id/button_paidParking"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        android:adjustViewBounds="true"
                         android:layout_weight="1"
-                        android:background="@drawable/round_rec"
+                        android:src="@drawable/paid_button"
                         android:orientation="vertical"
-                        android:layout_marginHorizontal="5dp"
                         android:gravity="center"
                         android:backgroundTint="#8ED1E6"
                         android:padding="5dp"
                         android:clickable="true"
                         android:onClick="show_paidParkingZone">
+                    </ImageView>
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/white"
-                            android:textStyle="bold"
-                            android:text="유료 주차장"/>
-                    </LinearLayout>
-
-                    <LinearLayout
+                    <ImageView
                         android:id="@+id/button_freeParking"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        android:adjustViewBounds="true"
                         android:layout_weight="1"
-                        android:background="@drawable/round_rec"
+                        android:src="@drawable/free_button"
                         android:orientation="vertical"
-                        android:layout_marginHorizontal="5dp"
                         android:padding="5dp"
                         android:backgroundTint="#8EC5F6"
                         android:gravity="center"
                         android:clickable="true"
                         android:onClick="show_freeParkingZone">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/white"
-                            android:textStyle="bold"
-                            android:text="무료 주차장"/>
-                    </LinearLayout>
+                    </ImageView>
 
                 </LinearLayout>
             </HorizontalScrollView>
