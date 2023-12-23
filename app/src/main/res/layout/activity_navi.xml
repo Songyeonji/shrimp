@@ -24,27 +24,42 @@
         android:backgroundTint="#7FA4EF">
         <View
             android:layout_width="1dp"
-            android:layout_height="50dp"/>
+            android:layout_height="75dp"/>
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
             android:orientation="horizontal">
 
             <ImageView
                 android:id="@+id/second_guide_image"
                 android:layout_width="wrap_content"
-                android:layout_height="30dp"
+                android:layout_height="50dp"
                 android:adjustViewBounds="true"
                 android:backgroundTint="@color/white"/>
-            <TextView
-                android:id="@+id/second_dist_text"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="10m"
-                android:textStyle="bold"
-                android:textSize="30dp"
-                android:textColor="@color/white"/>
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/second_dist_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="10m"
+                    android:textStyle="bold"
+                    android:textSize="30dp"
+                    android:textColor="@color/white"/>
+                <TextView
+                    android:id="@+id/second_guide_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="우회전"
+                    android:textStyle="bold"
+                    android:textSize="22dp"
+                    android:textColor="@color/white"/>
+            </LinearLayout>
+
         </LinearLayout>
 
     </LinearLayout>
@@ -64,21 +79,36 @@
         <ImageView
             android:id="@+id/guide_image"
             android:layout_width="wrap_content"
-            android:layout_height="50dp"
+            android:layout_height="70dp"
             android:adjustViewBounds="true"
             android:backgroundTint="@color/white"/>
-        <TextView
-            android:id="@+id/dist_text"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="10m"
-            android:textStyle="bold"
-            android:textSize="35dp"
-            android:textColor="@color/white"/>
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/dist_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="10m"
+                android:textStyle="bold"
+                android:textSize="32dp"
+                android:textColor="@color/white"/>
+            <TextView
+                android:id="@+id/guide_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="우회전"
+                android:textStyle="bold"
+                android:textSize="25dp"
+                android:textColor="@color/white"/>
+        </LinearLayout>
+
 
     </LinearLayout>
 
     <Button
+        android:id="@+id/end_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="안내 종료"
