@@ -93,6 +93,12 @@ public class MainActivity extends AppCompatActivity {
     private String category;
     private String link;
     private String tel;
+    private String weekOpen;
+    private String weekClose;
+    private String satOpen;
+    private String satClose;
+    private String holiOpen;
+    private String holiClose;
     private String time;
     private String price;
 
@@ -239,9 +245,39 @@ public class MainActivity extends AppCompatActivity {
                 }
                 this.name = paidParkingZone_name[n];
                 addr = paidParkingZone_addr[n];
-                time = "평일 open: " + freeParkingZone_weekOpen[n] + ", " + "평일 close: " + freeParkingZone_weekClose[n] + "\n" +
-                        "토요일 open: " + freeParkingZone_satOpen[n] + ", " + "토요일 close: " + freeParkingZone_satClose[n] + "\n" +
-                        "일요일/공휴일 open: " + freeParkingZone_holiOpen[n] + ", " + "일요일/공휴일 open: " + freeParkingZone_holiClose[n];
+                if (paidParkingZone_weekOpen[n] == "null"){
+                    weekOpen = " ";
+                }else{
+                    weekOpen = paidParkingZone_weekOpen[n];
+                }
+                if (paidParkingZone_weekClose[n] == "null"){
+                    weekClose = " ";
+                }else{
+                    weekClose = paidParkingZone_weekClose[n];
+                }
+                if (paidParkingZone_satOpen[n] == "null"){
+                    satOpen = " ";
+                }else{
+                    satOpen = paidParkingZone_satOpen[n];
+                }
+                if (paidParkingZone_satClose[n] == "null"){
+                    satClose = " ";
+                }else{
+                    satClose = paidParkingZone_satClose[n];
+                }
+                if (paidParkingZone_holiOpen[n] == "null"){
+                    holiOpen = " ";
+                }else{
+                    holiOpen = paidParkingZone_holiOpen[n];
+                }
+                if (paidParkingZone_holiClose[n] == "null"){
+                    holiClose = " ";
+                }else{
+                    holiClose = paidParkingZone_holiClose[n];
+                }
+                time = "평일 open: " + weekOpen + ", " + "평일 close: " + weekClose + "\n" +
+                        "토요일 open: " + satOpen + ", " + "토요일 close: " + satClose + "\n" +
+                        "일요일/공휴일 open: " + holiOpen + ", " + "일요일/공휴일 open: " + holiClose;
                 price = "기본요금: " + paidParkingZone_baseRate[n] + "원/" + paidParkingZone_baseTime[n] + "분" + "\n" +
                         "추가요금: " + paidParkingZone_addRate[n] + "원/" + paidParkingZone_addTime[n] + "분";
             } else {
@@ -260,9 +296,39 @@ public class MainActivity extends AppCompatActivity {
 
                 this.name = freeParkingZone_name[n];
                 addr = freeParkingZone_addr[n];
-                time = "평일 open: " + freeParkingZone_weekOpen[n] + ", " + "평일 close: " + freeParkingZone_weekClose[n] + "\n" +
-                        "토요일 open: " + freeParkingZone_satOpen[n] + ", " + "토요일 close: " + freeParkingZone_satClose[n] + "\n" +
-                        "일요일/공휴일 open: " + freeParkingZone_holiOpen[n] + ", " + "일요일/공휴일 open: " + freeParkingZone_holiClose[n];
+                if (freeParkingZone_weekOpen[n] == "null"){
+                    weekOpen = " ";
+                }else{
+                    weekOpen = freeParkingZone_weekOpen[n];
+                }
+                if (freeParkingZone_weekClose[n] == "null"){
+                    weekClose = " ";
+                }else{
+                    weekClose = freeParkingZone_weekClose[n];
+                }
+                if (freeParkingZone_satOpen[n] == "null"){
+                    satOpen = " ";
+                }else{
+                    satOpen = freeParkingZone_satOpen[n];
+                }
+                if (freeParkingZone_satClose[n] == "null"){
+                    satClose = " ";
+                }else{
+                    satClose = freeParkingZone_satClose[n];
+                }
+                if (freeParkingZone_holiOpen[n] == "null"){
+                    holiOpen = " ";
+                }else{
+                    holiOpen = freeParkingZone_holiOpen[n];
+                }
+                if (freeParkingZone_holiClose[n] == "null"){
+                    holiClose = " ";
+                }else{
+                    holiClose = freeParkingZone_holiClose[n];
+                }
+                time = "평일 open: " + weekOpen + ", " + "평일 close: " + weekClose + "\n" +
+                        "토요일 open: " + satOpen + ", " + "토요일 close: " + satClose + "\n" +
+                        "일요일/공휴일 open: " + holiOpen + ", " + "일요일/공휴일 open: " + holiClose;
 
             }
             marker.setMap(naverMap);
