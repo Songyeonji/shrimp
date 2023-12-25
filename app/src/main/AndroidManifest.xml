@@ -38,9 +38,6 @@
             android:value="83ejnr111i" />
 
         <activity
-            android:name=".MapActivity"
-            android:exported="true" />
-        <activity
             android:name=".Search"
             android:exported="false" />
     </application>

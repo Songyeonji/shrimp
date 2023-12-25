@@ -3,11 +3,11 @@ plugins {
 }
 
 android {
-    namespace 'com.example.seuzima'
-    compileSdk 33
+    namespace 'com.shrimp.seuzima'
+    compileSdk 34
 
     defaultConfig {
-        applicationId "com.example.seuzima"
+        applicationId "com.shrimp.seuzima"
         minSdk 24
         targetSdk 33
         versionCode 1
