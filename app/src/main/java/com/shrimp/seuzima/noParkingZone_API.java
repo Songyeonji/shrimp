@@ -27,7 +27,7 @@ public class noParkingZone_API {
                 @Override
                 public void run(){
                     // 쿼리 작성하기
-                    String api_key = "5Q44AbprRae2DW%2FDurbwg83MQLdKuV9wx3jkkhdCcZNwYdEyIw43X8kzO2syrpPz%2FQ257YQOjs3RFF4OnA4QVQ%3D%3D";
+                    String api_key = BuildConfig.NOPARKING_ZONE_API_KEY;
                     String pageNo = "1";
                     String dataCount = "365";
                     String queryUrl = "https://apis.data.go.kr/6300000/openapi2022/vstpCCTV/getvstpCCTV?serviceKey="+api_key+
@@ -63,6 +63,7 @@ public class noParkingZone_API {
                             lat[i] = Double.valueOf(data.getString("crdntY"));
 
                         }
+
                         Log.d("noParkingAPI_DATA: ", name[364]);
 
 

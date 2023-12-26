@@ -30,8 +30,8 @@ public class SEARCH_API {
 
 
     public static void main(String args) throws JSONException {
-        String clientId = "_mGhuJl_G59um5hr3hqz"; //애플리케이션 클라이언트 아이디
-        String clientSecret = "pZgnKmwxPB"; //애플리케이션 클라이언트 시크릿
+        String clientId = BuildConfig.NAVER_CLIENT_ID; //애플리케이션 클라이언트 아이디
+        String clientSecret = BuildConfig.NAVER_CLIENT_SECRET; //애플리케이션 클라이언트 시크릿
 
 
         String text = null;

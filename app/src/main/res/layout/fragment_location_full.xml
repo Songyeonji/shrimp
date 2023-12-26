@@ -20,26 +20,30 @@
 
         <TextView
             android:id="@+id/loc_title"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="장소 이름"
             android:textStyle="bold"
-            android:textSize="24dp"
+            android:textSize="20dp"
+            android:layout_weight="1.5"
             android:textColor="#21314C"/>
         <TextView
             android:id="@+id/text_category"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="카테고리"
             android:textSize="16dp"
-            android:layout_weight="1"
+            android:gravity="right"
+            android:layout_weight="2"
             android:layout_marginHorizontal="8dp"/>
 
         <ImageView
             android:id="@+id/delete_bttn"
-            android:layout_width="40dp"
+            android:layout_width="match_parent"
             android:layout_height="40dp"
+            android:adjustViewBounds="true"
             android:src="@drawable/x_icon"
+            android:layout_weight="3"
             android:clickable="true"/>
     </LinearLayout>
 
@@ -50,6 +54,30 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
+
+
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="20dp">
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="wrap_content"
+                    android:adjustViewBounds="true"
+                    android:src="@drawable/loc_icon"
+                    android:layout_marginRight="10dp"/>
+                <TextView
+                    android:id="@+id/loc_addr"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="주소"
+                    android:textColor="#777777"
+                    android:textSize="18dp"
+                    android:textStyle="bold"/>
+            </LinearLayout>
+
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -99,110 +127,229 @@
 
             </LinearLayout>
 
-            <LinearLayout
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="운영 시간"
+                android:textSize="18dp"
+                android:textStyle="bold"
+                android:textColor="#939393"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#cccccc"
+                android:layout_marginTop="10dp"/>
+
+        <LinearLayout
+            android:id="@+id/time_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/round_rec"
+            android:gravity="center_vertical"
+            android:layout_marginTop="10dp">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginTop="20dp">
-                <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="wrap_content"
-                    android:adjustViewBounds="true"
-                    android:src="@drawable/loc_icon"
-                    android:layout_marginRight="10dp"/>
+                android:background="@drawable/round_layout"
+                android:backgroundTint="@color/main_blue"
+                android:gravity="center_vertical">
                 <TextView
-                    android:id="@+id/loc_addr"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="주소"
-                    android:textColor="#777777"
+                    android:text="구분"
+                    android:layout_margin="5dp"
+                    android:textStyle="bold"
+                    android:gravity="center"
+                    android:layout_weight="1"
+                    android:textSize="18dp"
+                    android:layout_marginRight="10dp"
+                    android:textColor="#ffffff"/>
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:background="#ffffff"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:text="open"
+                    android:gravity="center"
+                    android:layout_weight="1"
+                    android:textColor="#ffffff"
+                    android:textSize="18dp"
+                    android:textStyle="bold"/>
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:background="#ffffff"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:text="close"
+                    android:gravity="center"
+                    android:layout_weight="1"
+                    android:textColor="#ffffff"
                     android:textSize="18dp"
                     android:textStyle="bold"/>
             </LinearLayout>
-
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#cccccc"/>
             <LinearLayout
-                android:id="@+id/tel_layout"
-                android:layout_width="wrap_content"
+                android:id="@+id/week_time"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginTop="10dp">
-                <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="wrap_content"
-                    android:adjustViewBounds="true"
-                    android:src="@drawable/tel_icon"
-                    android:layout_marginRight="10dp"/>
+                android:gravity="center_vertical">
                 <TextView
-                    android:id="@+id/loc_tel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="평일"
+                    android:gravity="center"
+                    android:layout_margin="5dp"
+                    android:textStyle="bold"
+                    android:layout_weight="1"
+                    android:textSize="18dp"
+                    android:layout_marginRight="10dp"
+                    android:textColor="@color/main_blue"/>
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:background="#cccccc"/>
+                <TextView
+                    android:id="@+id/weekOpen"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:text="   "
+                    android:layout_weight="1"
+                    android:textColor="#777777"
+                    android:textSize="18dp"/>
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:background="#cccccc"/>
+                <TextView
+                    android:id="@+id/weekClose"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:text="   "
+                    android:layout_weight="1"
+                    android:textColor="#777777"
+                    android:textSize="18dp"/>
+            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#cccccc"/>
+            <LinearLayout
+                android:id="@+id/sat_time"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:text="토요일"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:textStyle="bold"
+                    android:textSize="18dp"
+                    android:layout_marginRight="10dp"
+                    android:textColor="@color/main_blue"/>
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:background="#cccccc"/>
+                <TextView
+                    android:id="@+id/satOpen"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:text="   "
+                    android:layout_weight="1"
+                    android:textColor="#777777"
+                    android:textSize="18dp"/>
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:background="#cccccc"/>
+                <TextView
+                    android:id="@+id/satClose"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:text="   "
+                    android:textColor="#777777"
+                    android:textSize="18dp"/>
+            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#cccccc"/>
+            <LinearLayout
+                android:id="@+id/holi_time"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="일요일/공휴일"
+                    android:layout_margin="5dp"
+                    android:gravity="center"
+                    android:layout_weight="1"
+                    android:textStyle="bold"
+                    android:textSize="18dp"
+                    android:layout_marginRight="10dp"
+                    android:textColor="@color/main_blue"/>
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:background="#cccccc"/>
+                <TextView
+                    android:id="@+id/holiOpen"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:text="   "
+                    android:textColor="#777777"
+                    android:textSize="18dp"/>
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:background="#cccccc"/>
+                <TextView
+                    android:id="@+id/holiClose"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="   "
+                    android:layout_weight="1"
+                    android:layout_margin="5dp"
                     android:textColor="#777777"
-                    android:textSize="18dp"
-                    android:textStyle="bold"/>
+                    android:textSize="18dp"/>
             </LinearLayout>
+        </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/web_layout"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="10dp">
-                <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="wrap_content"
-                    android:adjustViewBounds="true"
-                    android:src="@drawable/web_icon"
-                    android:layout_marginRight="10dp"/>
-                <TextView
-                    android:id="@+id/loc_link"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="   "
-                    android:textColor="#777777"
-                    android:textSize="18dp"
-                    android:textStyle="bold"/>
-            </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/time_layout"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="10dp">
-                <TextView
-                    android:id="@+id/loc_time"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="40dp"
-                    android:text="   "
-                    android:textColor="#777777"
-                    android:textSize="18dp"
-                    android:textStyle="bold"/>
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/price_layout"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="10dp">
-                <TextView
-                    android:id="@+id/loc_price"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="40dp"
-                    android:text="   "
-                    android:textColor="#777777"
-                    android:textSize="18dp"
-                    android:textStyle="bold"/>
-            </LinearLayout>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                android:text="후기"
+                android:text="요금"
+                android:textStyle="bold"
                 android:textSize="18dp"
                 android:textColor="#939393"/>
             <View
@@ -212,12 +359,166 @@
                 android:layout_marginTop="10dp"/>
 
             <LinearLayout
-                android:id="@+id/review_layout"
+                android:id="@+id/fee_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:background="@drawable/round_rec"
+                android:gravity="center_vertical"
+                android:layout_marginTop="10dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:background="@drawable/round_layout"
+                    android:backgroundTint="@color/main_blue"
+                    android:gravity="center_vertical">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="구분"
+                        android:layout_margin="5dp"
+                        android:textStyle="bold"
+                        android:gravity="center"
+                        android:textColor="#ffffff"
+                        android:layout_weight="1.1"
+                        android:textSize="18dp"
+                        android:layout_marginRight="10dp"/>
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent"
+                        android:background="#ffffff"/>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:text="요금"
+                        android:gravity="center"
+                        android:layout_weight="1"
+                        android:textColor="#ffffff"
+                        android:textSize="18dp"
+                        android:textStyle="bold"/>
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent"
+                        android:background="#ffffff"/>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:text="시간"
+                        android:gravity="center"
+                        android:layout_weight="1"
+                        android:textColor="#ffffff"
+                        android:textSize="18dp"
+                        android:textStyle="bold"/>
+                </LinearLayout>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#cccccc"/>
+                <LinearLayout
+                    android:id="@+id/baseFee"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="기본요금"
+                        android:gravity="center"
+                        android:layout_margin="5dp"
+                        android:textStyle="bold"
+                        android:layout_weight="1.1"
+                        android:textSize="18dp"
+                        android:layout_marginRight="10dp"
+                        android:textColor="@color/main_blue"/>
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent"
+                        android:background="#cccccc"/>
+                    <TextView
+                        android:id="@+id/baseRate"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:text="   "
+                        android:layout_weight="1"
+                        android:textColor="#777777"
+                        android:textSize="18dp"/>
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent"
+                        android:background="#cccccc"/>
+                    <TextView
+                        android:id="@+id/baseTime"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:text="   "
+                        android:layout_weight="1"
+                        android:textColor="#777777"
+                        android:textSize="18dp"/>
+                </LinearLayout>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#cccccc"/>
+                <LinearLayout
+                    android:id="@+id/add_fee"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:text="추가요금"
+                        android:layout_weight="1.1"
+                        android:gravity="center"
+                        android:textStyle="bold"
+                        android:textSize="18dp"
+                        android:layout_marginRight="10dp"
+                        android:textColor="@color/main_blue"/>
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent"
+                        android:background="#cccccc"/>
+                    <TextView
+                        android:id="@+id/addRate"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:text="   "
+                        android:layout_weight="1"
+                        android:textColor="#777777"
+                        android:textSize="18dp"/>
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent"
+                        android:background="#cccccc"/>
+                    <TextView
+                        android:id="@+id/addTime"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:layout_weight="1"
+                        android:text="   "
+                        android:textColor="#777777"
+                        android:textSize="18dp"/>
+                </LinearLayout>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#cccccc"/>
 
             </LinearLayout>
+
+
+
+
         </LinearLayout>
     </ScrollView>
 

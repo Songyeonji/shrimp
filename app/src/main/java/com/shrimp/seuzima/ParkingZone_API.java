@@ -76,7 +76,7 @@ public class ParkingZone_API {
                 @Override
                 public void run(){
                     // 쿼리 작성하기
-                    String api_key = "UhsJNt7dpE1r5bSAnj7VjXZDFlcK8rpnEkZ%2BrYRhT0CaBNFs%2BcR9okv6jEEoiCYTSjRLSMZsSpXF%2FhdbVCihsw%3D%3D";
+                    String api_key = BuildConfig.PARKING_ZONE_API_KEY;
                     String pageNo = "1";
                     String dataCount = String.valueOf(num);
                     String queryUrl = "https://challenge.daejeon.go.kr/restapi/openapi/smart_on/parking/info?serviceKey="+api_key+
@@ -143,6 +143,7 @@ public class ParkingZone_API {
                             }
 
                         }
+//                        ((MainActivity) MainActivity.context).show_searchingLayout();
                         Log.d("ParkingAPI_DATA: ", paid_name[364]);
                         Log.d("freeParkingAPI_DATA: ", free_name[3]);
 

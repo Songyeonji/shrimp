@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -37,13 +38,23 @@ public class LocationFullFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        TextView loc_title = view.findViewById(R.id.loc_title);
-        TextView loc_addr = view.findViewById(R.id.loc_addr);
-        TextView loc_tel = view.findViewById(R.id.loc_tel);
-        TextView loc_link = view.findViewById(R.id.loc_link);
-        TextView loc_time = view.findViewById(R.id.loc_time);
-        TextView loc_price = view.findViewById(R.id.loc_price);
         TextView loc_category = view.findViewById(R.id.text_category);
+
+        TextView textView_title = view.findViewById(R.id.loc_title);
+        TextView textView_addr = view.findViewById(R.id.loc_addr);
+        TextView textView_weekOpen = view.findViewById(R.id.weekOpen);
+        TextView textView_weekClose = view.findViewById(R.id.weekClose);
+        TextView textView_satOpen = view.findViewById(R.id.satOpen);
+        TextView textView_satClose = view.findViewById(R.id.satClose);
+        TextView textView_holiOpen = view.findViewById(R.id.holiOpen);
+        TextView textView_holiClose = view.findViewById(R.id.holiClose);
+        TextView textView_baseRate = view.findViewById(R.id.baseRate);
+        TextView textView_baseTime = view.findViewById(R.id.baseTime);
+        TextView textView_addRate = view.findViewById(R.id.addRate);
+        TextView textView_addTime = view.findViewById(R.id.addTime);
+
+        FrameLayout show_full_view = view.findViewById(R.id.show_full_view);
+
 
 
         // mapview에서 받아온 위치 정보(이름, 주소, 위경도) 가져와서 문자열 및 double 변수에 저장
@@ -51,31 +62,35 @@ public class LocationFullFragment extends Fragment {
         String addr = this.getArguments().getString("loc_addr");
         Double latitude = this.getArguments().getDouble("loc_lat");
         Double longitude = this.getArguments().getDouble("loc_lon");
+        String weekOpen = this.getArguments().getString("weekOpen");
+        String weekClose = this.getArguments().getString("weekClose");
+        String satOpen = this.getArguments().getString("satOpen");
+        String satClose = this.getArguments().getString("satClose");
+        String holiOpen = this.getArguments().getString("holiOpen");
+        String holiClose = this.getArguments().getString("holiClose");
+        String baseRate = this.getArguments().getString("baseRate");
+        String baseTime = this.getArguments().getString("baseTime");
+        String addRate = this.getArguments().getString("addRate");
+        String addTime = this.getArguments().getString("addTime");
         String category = this.getArguments().getString("loc_category");
-        String link = this.getArguments().getString("loc_link");
-        String tel = this.getArguments().getString("loc_tel");
-        String time = this.getArguments().getString("loc_time");
-        String price = this.getArguments().getString("loc_price");
         //"loc_lon", longitude
 
         // 장소 이름, 주소는 각각 textview에 저장
-        loc_title.setText(title);
-        loc_addr.setText(addr);
-        loc_time.setText(time);
-        loc_price.setText(price);
+        textView_title.setText(title);
+        textView_addr.setText(addr);
+        textView_weekOpen.setText(weekOpen);
+        textView_weekClose.setText(weekClose);
+        textView_satOpen.setText(satOpen);
+        textView_satClose.setText(satClose);
+        textView_holiOpen.setText(holiOpen);
+        textView_holiClose.setText(holiClose);
+        textView_baseRate.setText(baseRate);
+        textView_baseTime.setText(baseTime);
+        textView_addRate.setText(addRate);
+        textView_addTime.setText(addTime);
+
         loc_category.setText(category);
-        if (tel==null||tel.equals("")) {
 
-            view.findViewById(R.id.tel_layout).setVisibility(View.GONE);
-        } else {
-            loc_tel.setText(tel);
-        }
-        if (link==null||link.equals("")) {
-            view.findViewById(R.id.web_layout).setVisibility(View.GONE);
-
-        } else {
-            loc_link.setText(link);
-        }
 
     }
 }

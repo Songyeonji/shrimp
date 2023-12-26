@@ -3,6 +3,7 @@ package com.shrimp.seuzima;
 import static android.speech.tts.TextToSpeech.ERROR;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
@@ -31,6 +32,7 @@ import com.naver.maps.map.LocationTrackingMode;
 import com.naver.maps.map.MapView;
 import com.naver.maps.map.NaverMap;
 import com.naver.maps.map.OnMapReadyCallback;
+import com.naver.maps.map.UiSettings;
 import com.naver.maps.map.overlay.LocationOverlay;
 import com.naver.maps.map.overlay.Marker;
 import com.naver.maps.map.overlay.OverlayImage;
@@ -174,6 +176,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 throw new RuntimeException(e);
             }
         }
+        UiSettings uiSettings = naverMap.getUiSettings();
+        uiSettings.setLogoClickEnabled(false);
     }
 
     // 사용자 위치 실시간으로 받아와서 지도에 표시하는 함수
@@ -249,10 +253,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
 
         final int[] n = {0};
-        Log.d("guide", guideArray.getString(n[0]));
-//        Log.d("guide", guidePoint.getString(n[0]));
-        Log.d("guide_inst", guideArray.getJSONObject(n[0]).getString("instructions"));
-        final int[] inst_count = {0,0,0};
+
         naverMap.addOnLocationChangeListener(new NaverMap.OnLocationChangeListener() {
             @Override
             public void onLocationChange(@NonNull Location location) {
@@ -264,7 +265,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                     String next_guide="";
 
                     String guide = NAVI_API.guideArray.getJSONObject(n[0]).getString("instructions").toString();
-                    if (guideArray.length()>=n[0]+1) {
+                    if (guideArray.length()>n[0]+1) {
                         next_guide_location = new Location(""){{setLatitude(guidePoint.get(n[0]+1).getDouble(1));
                             setLongitude(guidePoint.get(n[0]+1).getDouble(0));}};
                         next_distance = guide_location.distanceTo(next_guide_location);
@@ -286,20 +287,21 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                             if (textToSpeech.isSpeaking()==false) {
                                 textToSpeech.speak("약 300미터 앞에서 " + guide+"로 진입하세요.", TextToSpeech.QUEUE_FLUSH, null);
                             }
-                        }else if(guide.contains("옆길")) {
+                        } else if(guide.contains("U턴")) {
+                            if (textToSpeech.isSpeaking() == false) {
+                                textToSpeech.speak("약 300미터 앞에서 " + guide + "하세요.", TextToSpeech.QUEUE_FLUSH, null);
+                            }
+                        } else if(guide.contains("옆길")) {
                             if (textToSpeech.isSpeaking()==false) {
                                 textToSpeech.speak("약 300미터 앞에서 " + guide+"로 이동하세요.", TextToSpeech.QUEUE_FLUSH, null);
                             }
-                        }else if(guide.equals("목적지")) {
-                            if (textToSpeech.isSpeaking()==false) {
-                                Log.d("목적지", "300m left");
-                            }
+                        } else if(guide.contains("목적지")) {
+
                         }else {
                             if (textToSpeech.isSpeaking()==false) {
                                 textToSpeech.speak("약 300미터 앞에서 " + guide+"하세요.", TextToSpeech.QUEUE_FLUSH, null);
                             }
                         }
-                        inst_count[0]++;
 
                     }
                     else if (distance <= 100.0f && distance >95.0f) {
@@ -325,6 +327,14 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                                     textToSpeech.speak("100미터 앞에서 "+guide+" 하세요.", TextToSpeech.QUEUE_FLUSH, null);
                                 }
                             }
+                        } else if(guide.contains("톨게이트")) {
+                            if (textToSpeech.isSpeaking()==false) {
+                                textToSpeech.speak("약 300미터 앞에서 " + guide+"로 진입하세요.", TextToSpeech.QUEUE_FLUSH, null);
+                            }
+                        } else if(guide.contains("U턴")) {
+                            if (textToSpeech.isSpeaking() == false) {
+                                textToSpeech.speak("약 100미터 앞에서 " + guide + "하세요.", TextToSpeech.QUEUE_FLUSH, null);
+                            }
                         } else if (guide.contains("목적지")) {
                             if (textToSpeech.isSpeaking()==false) {
                                 textToSpeech.speak("100미터 앞에" + guide + "가 있습니다.", TextToSpeech.QUEUE_FLUSH, null);
@@ -333,16 +343,15 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
 
                     }else if (distance <= 40.0f && distance>25.0f) {
-                        if (guideArray.length()>=n[0]+1) {
+                        if (guideArray.length()>n[0]+1) {
                             n[0]++;
                         }
                     }else if (distance <= 20.0f && distance>15.0f) {
                         if (guide.equals("목적지")) {
-                            if (inst_count[2]==0) {
-                                Toast.makeText(getActivity(), "목적지에 도착하였습니다. 안내를 종료합니다.", Toast.LENGTH_SHORT).show();
-                                textToSpeech.speak("목적지에 도착하였습니다. 안내를 종료합니다.", TextToSpeech.QUEUE_FLUSH, null);
-                                inst_count[2]++;
-                            }
+                            Toast.makeText(getActivity(), "목적지에 도착하였습니다. 안내를 종료합니다.", Toast.LENGTH_SHORT).show();
+                            textToSpeech.speak("목적지에 도착하였습니다. 안내를 종료합니다.", TextToSpeech.QUEUE_FLUSH, null);
+                            Intent intent = new Intent(getActivity(), MainActivity.class);
+                            startActivity(intent);
 
                         }
                     }
@@ -377,7 +386,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         } else if (guide.contains("좌회전")||guide.contains("왼쪽")) {
             imageView_guide.setImageResource(R.drawable.turn_left);
             textView_guide.setText("좌회전");
-        } else if (guide.contains("유턴")) {
+        } else if (guide.contains("U턴")) {
             imageView_guide.setImageResource(R.drawable.u_turn);
             textView_guide.setText("U턴");
         } else if (guide.contains("직진")) {
@@ -406,7 +415,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             } else if (next_guide.contains("좌회전")||next_guide.contains("왼쪽")) {
                 imageView_next_guide.setImageResource(R.drawable.turn_left);
                 textView_next_guide.setText("좌회전");
-            } else if (next_guide.contains("유턴")) {
+            } else if (next_guide.contains("U턴")) {
                 imageView_next_guide.setImageResource(R.drawable.u_turn);
                 textView_next_guide.setText("U턴");
             } else if (next_guide.contains("직진")) {

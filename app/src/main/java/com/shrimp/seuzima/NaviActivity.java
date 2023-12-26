@@ -10,9 +10,12 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 
 public class NaviActivity extends AppCompatActivity {
 
@@ -22,6 +25,15 @@ public class NaviActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navi);
+
+        Button end_button = findViewById(R.id.end_button);
+        end_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(NaviActivity.this, MainActivity.class);
+                startActivity(intent);
+            }
+        });
 
         addFragment();
     }

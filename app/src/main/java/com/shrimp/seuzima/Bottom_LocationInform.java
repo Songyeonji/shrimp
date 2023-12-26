@@ -83,8 +83,8 @@ public class Bottom_LocationInform extends Fragment {
         TextView loc_addr = view.findViewById(R.id.loc_addr);
         TextView loc_tel = view.findViewById(R.id.loc_tel);
         TextView loc_link = view.findViewById(R.id.loc_link);
-        TextView loc_time = view.findViewById(R.id.loc_time);
-        TextView loc_price = view.findViewById(R.id.loc_price);
+
+        FrameLayout full_view = view.findViewById(R.id.show_full_view);
 
 
         // mapview에서 받아온 위치 정보(이름, 주소, 위경도) 가져와서 문자열 및 double 변수에 저장
@@ -94,31 +94,30 @@ public class Bottom_LocationInform extends Fragment {
         longitude = this.getArguments().getDouble("loc_lon");
         String link = this.getArguments().getString("loc_link");
         String tel = this.getArguments().getString("loc_tel");
-        String time = this.getArguments().getString("loc_time");
-        String price = this.getArguments().getString("loc_price");
+        String category = this.getArguments().getString("loc_category");
         //"loc_lon", longitude
 
         // 장소 이름, 주소는 각각 textview에 저장
         loc_title.setText(title);
         loc_addr.setText(addr);
-        loc_time.setText(time);
-        loc_price.setText(price);
         view.findViewById(R.id.time_layout).setVisibility(View.GONE);
         view.findViewById(R.id.price_layout).setVisibility(View.GONE);
-        if (tel.equals("")) {
+        if (tel==null || tel.equals("")) {
 
             view.findViewById(R.id.tel_layout).setVisibility(View.GONE);
         } else {
             loc_tel.setText(tel);
         }
-        if (link.equals("")) {
+        if (link==null || link.equals("")) {
             view.findViewById(R.id.web_layout).setVisibility(View.GONE);
 
         } else {
             loc_link.setText(link);
         }
 
-
+        if (category.contains("주차장")) {
+            full_view.setVisibility(View.VISIBLE);
+        }
 
     }
 

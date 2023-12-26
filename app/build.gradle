@@ -10,15 +10,20 @@ android {
         applicationId "com.shrimp.seuzima"
         minSdk 24
         targetSdk 33
-        versionCode 1
+        versionCode 3
         versionName "1.0"
+        buildConfigField "String","NAVER_MAP_API_KEY", NAVER_MAP_API_KEY
+        buildConfigField "String","NAVER_CLIENT_ID", NAVER_CLIENT_ID
+        buildConfigField "String","NAVER_CLIENT_SECRET", NAVER_CLIENT_SECRET
+        buildConfigField "String","NOPARKING_ZONE_API_KEY", NOPARKING_ZONE_API_KEY
+        buildConfigField "String","PARKING_ZONE_API_KEY", PARKING_ZONE_API_KEY
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }

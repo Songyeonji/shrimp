@@ -20,6 +20,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.naver.maps.geometry.LatLng;
 import com.naver.maps.map.NaverMap;
@@ -99,8 +100,10 @@ public class MainActivity extends AppCompatActivity {
     private String satClose;
     private String holiOpen;
     private String holiClose;
-    private String time;
-    private String price;
+    private String baseRate;
+    private String addRate;
+    private String baseTime;
+    private String addTime;
 
     // Manifest에서 설정된 권한 정보 가져오기
     public static final String[] PERMISSIONS = {
@@ -113,9 +116,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         NaverMapSdk.getInstance(this).setClient(
-                new NaverMapSdk.NaverCloudPlatformClient("83ejnr111i"));
+                new NaverMapSdk.NaverCloudPlatformClient(BuildConfig.NAVER_MAP_API_KEY));
 
         context = this;
+
+
         getNoParkingData();
         getParkingData();
 
@@ -137,6 +142,15 @@ public class MainActivity extends AppCompatActivity {
         fragmentTransaction.commit();
     }
 
+    private void show_waiting_view() {
+        findViewById(R.id.home_content).setVisibility(View.GONE);
+        FrameLayout full_view = findViewById(R.id.full_view);
+        full_view.setVisibility(View.VISIBLE);
+
+        WaitingFragment waitingFragment = new WaitingFragment();
+        getSupportFragmentManager().beginTransaction().replace(R.id.full_view, waitingFragment).commit();
+    }
+
     public void set_init() {
         Intent getintent = getIntent();
         name = getintent.getStringExtra("loc_name");
@@ -146,15 +160,13 @@ public class MainActivity extends AppCompatActivity {
         category = getintent.getStringExtra("loc_category");
         link = getintent.getStringExtra("loc_link");
         tel = getintent.getStringExtra("loc_tel");
-        time = getintent.getStringExtra("loc_time");
-        price = getintent.getStringExtra("loc_price");
 
         if (x!=0 && y!=0) {
             lat = y/Math.pow(10,7);
             lon = x/Math.pow(10,7);
 
             mapFragment.location_marker(lat, lon);
-            show_Bottom_Location(name, addr, lat, lon, link, tel, time, price, category);
+            show_Bottom_Location(name, addr, lat, lon, link, tel, "", "", "", "", "", "", "", "", category);
         } else {
             mapFragment.set_user_location(naverMap);
         }
@@ -246,40 +258,40 @@ public class MainActivity extends AppCompatActivity {
                 this.name = paidParkingZone_name[n];
                 addr = paidParkingZone_addr[n];
                 if (paidParkingZone_weekOpen[n] == "null"){
-                    weekOpen = " ";
+                    weekOpen = "-";
                 }else{
                     weekOpen = paidParkingZone_weekOpen[n];
                 }
                 if (paidParkingZone_weekClose[n] == "null"){
-                    weekClose = " ";
+                    weekClose = "-";
                 }else{
                     weekClose = paidParkingZone_weekClose[n];
                 }
                 if (paidParkingZone_satOpen[n] == "null"){
-                    satOpen = " ";
+                    satOpen = "-";
                 }else{
                     satOpen = paidParkingZone_satOpen[n];
                 }
                 if (paidParkingZone_satClose[n] == "null"){
-                    satClose = " ";
+                    satClose = "-";
                 }else{
                     satClose = paidParkingZone_satClose[n];
                 }
                 if (paidParkingZone_holiOpen[n] == "null"){
-                    holiOpen = " ";
+                    holiOpen = "-";
                 }else{
                     holiOpen = paidParkingZone_holiOpen[n];
                 }
                 if (paidParkingZone_holiClose[n] == "null"){
-                    holiClose = " ";
+                    holiClose = "-";
                 }else{
                     holiClose = paidParkingZone_holiClose[n];
                 }
-                time = "평일 open: " + weekOpen + ", " + "평일 close: " + weekClose + "\n" +
-                        "토요일 open: " + satOpen + ", " + "토요일 close: " + satClose + "\n" +
-                        "일요일/공휴일 open: " + holiOpen + ", " + "일요일/공휴일 open: " + holiClose;
-                price = "기본요금: " + paidParkingZone_baseRate[n] + "원/" + paidParkingZone_baseTime[n] + "분" + "\n" +
-                        "추가요금: " + paidParkingZone_addRate[n] + "원/" + paidParkingZone_addTime[n] + "분";
+                baseRate = paidParkingZone_baseRate[n] + "원";
+                baseTime = paidParkingZone_baseTime[n] + "분";
+                addRate = paidParkingZone_addRate[n] + "원";
+                addTime = paidParkingZone_addTime[n] + "분";
+
             } else {
                 category = "무료 주차장";
                 int n = 0;
@@ -297,42 +309,43 @@ public class MainActivity extends AppCompatActivity {
                 this.name = freeParkingZone_name[n];
                 addr = freeParkingZone_addr[n];
                 if (freeParkingZone_weekOpen[n] == "null"){
-                    weekOpen = " ";
+                    weekOpen = "-";
                 }else{
                     weekOpen = freeParkingZone_weekOpen[n];
                 }
                 if (freeParkingZone_weekClose[n] == "null"){
-                    weekClose = " ";
+                    weekClose = "-";
                 }else{
                     weekClose = freeParkingZone_weekClose[n];
                 }
                 if (freeParkingZone_satOpen[n] == "null"){
-                    satOpen = " ";
+                    satOpen = "-";
                 }else{
                     satOpen = freeParkingZone_satOpen[n];
                 }
                 if (freeParkingZone_satClose[n] == "null"){
-                    satClose = " ";
+                    satClose = "-";
                 }else{
                     satClose = freeParkingZone_satClose[n];
                 }
                 if (freeParkingZone_holiOpen[n] == "null"){
-                    holiOpen = " ";
+                    holiOpen = "-";
                 }else{
                     holiOpen = freeParkingZone_holiOpen[n];
                 }
                 if (freeParkingZone_holiClose[n] == "null"){
-                    holiClose = " ";
+                    holiClose = "-";
                 }else{
                     holiClose = freeParkingZone_holiClose[n];
                 }
-                time = "평일 open: " + weekOpen + ", " + "평일 close: " + weekClose + "\n" +
-                        "토요일 open: " + satOpen + ", " + "토요일 close: " + satClose + "\n" +
-                        "일요일/공휴일 open: " + holiOpen + ", " + "일요일/공휴일 open: " + holiClose;
+                baseTime = "-";
+                baseRate = "무료";
+                addTime = "-";
+                addRate = "무료";
 
             }
             marker.setMap(naverMap);
-            show_Bottom_Location(this.name, addr, lat, lon,"","", time, price, category);
+            show_Bottom_Location(this.name, addr, lat, lon,weekOpen, weekClose, satOpen, satClose, holiOpen, holiClose, baseRate, addRate, baseTime, addTime, category);
             return true;
         };
         marker.setOnClickListener(listener);
@@ -340,7 +353,7 @@ public class MainActivity extends AppCompatActivity {
         return marker;
     }
 
-    private void show_Bottom_Location(String name, String addr, Double lat, Double lon, String link, String tel, String time, String price, String category) {
+    private void show_Bottom_Location(String name, String addr, Double lat, Double lon, String weekOpen, String weekClose, String satOpen, String satClose, String holiOpen, String holiClose, String baseRate, String addRate,String baseTime, String addTime, String category) {
 
         LinearLayout search_layout = findViewById(R.id.search_layout);
         search_layout.setVisibility(View.GONE);
@@ -353,8 +366,19 @@ public class MainActivity extends AppCompatActivity {
         bundle.putDouble("loc_lon", lon);
         bundle.putString("loc_link", link);
         bundle.putString("loc_tel", tel);
-        bundle.putString("loc_time", time);
-        bundle.putString("loc_price", price);
+        bundle.putString("week_open", weekOpen);
+        bundle.putString("week_close", weekClose);
+
+        bundle.putString("sat_open", satOpen);
+        bundle.putString("sat_close", satClose);
+
+        bundle.putString("holi_open", holiOpen);
+        bundle.putString("holi_close", holiClose);
+        bundle.putString("baseRate", baseRate);
+        bundle.putString("baseTime", baseTime);
+        bundle.putString("addRate", addRate);
+        bundle.putString("addTime", addTime);
+
         bundle.putString("loc_category", category);
 
         bottom_locationInform = new Bottom_LocationInform();
@@ -423,18 +447,23 @@ public class MainActivity extends AppCompatActivity {
 
     // 주차 금지 구역 마커 찍는 구간
     public void show_noParkingZone(View view) {
-        Log.d("lat: ", noParkingZone_lat[364].toString());
-        if (noParking.equals(Boolean.FALSE)) {
-            for (int i = 0; i<365; i++) {
-                noParking_markerList.add(createMarker(naverMap, noParkingZone_lat[i], noParkingZone_lon[i], "no"));
-                noParking = Boolean.TRUE;
-            }
+        if (noParkingZone_name[0]==null) {
+            Toast.makeText(this, "데이터를 가져오는 중입니다. 잠시만 기다려주세요.", Toast.LENGTH_SHORT).show();
         } else {
-            for (int i = 0; i<365; i++) {
-                mapFragment.hideMarkers(noParking_markerList);
-                noParking = Boolean.FALSE;
+            Log.d("lat: ", noParkingZone_lat[364].toString());
+            if (noParking.equals(Boolean.FALSE)) {
+                for (int i = 0; i<365; i++) {
+                    noParking_markerList.add(createMarker(naverMap, noParkingZone_lat[i], noParkingZone_lon[i], "no"));
+                    noParking = Boolean.TRUE;
+                }
+            } else {
+                for (int i = 0; i<365; i++) {
+                    mapFragment.hideMarkers(noParking_markerList);
+                    noParking = Boolean.FALSE;
+                }
             }
         }
+
     }
     public void show_searchingLayout() {
         if (findViewById(R.id.home_content).getVisibility()==View.GONE) {
@@ -455,40 +484,50 @@ public class MainActivity extends AppCompatActivity {
 
     // 무료 주차장 마커 표시 함수
     public void show_freeParkingZone(View view) {
-        if (freeParking.equals(Boolean.FALSE)) {
-            int i = 0;
-            while (freeParkingZone_lat[i]!=null) {
-                free_markerList.add(createMarker(naverMap, freeParkingZone_lat[i], freeParkingZone_lon[i], "free"));
-                freeParking = Boolean.TRUE;
-                i++;
-            }
+        if (freeParkingZone_name[0]==null) {
+            Toast.makeText(this, "데이터를 가져오는 중입니다. 잠시만 기다려주세요.", Toast.LENGTH_SHORT).show();
         } else {
-            int i = 0;
-            while (freeParkingZone_lat[i]!=null) {
-                mapFragment.hideMarkers(free_markerList);
-                freeParking = Boolean.FALSE;
-                i++;
+            if (freeParking.equals(Boolean.FALSE)) {
+                int i = 0;
+                while (freeParkingZone_lat[i]!=null) {
+                    free_markerList.add(createMarker(naverMap, freeParkingZone_lat[i], freeParkingZone_lon[i], "free"));
+                    freeParking = Boolean.TRUE;
+                    i++;
+                }
+            } else {
+                int i = 0;
+                while (freeParkingZone_lat[i]!=null) {
+                    mapFragment.hideMarkers(free_markerList);
+                    freeParking = Boolean.FALSE;
+                    i++;
+                }
             }
         }
+
     }
 
     // 유료 주차장 마커 표시 함수
     public void show_paidParkingZone(View view) {
-        if (paidParking.equals(Boolean.FALSE)) {
-            int i = 0;
-            while (paidParkingZone_lat[i]!=null) {
-                paid_markerList.add(createMarker(naverMap, paidParkingZone_lat[i], paidParkingZone_lon[i], "paid"));
-                paidParking = Boolean.TRUE;
-                i++;
-            }
+        if (paidParkingZone_name[0]==null) {
+            Toast.makeText(this, "데이터를 가져오는 중입니다. 잠시만 기다려주세요.", Toast.LENGTH_SHORT).show();
         } else {
-            int i = 0;
-            while (paidParkingZone_lat[i]!=null) {
-                mapFragment.hideMarkers(paid_markerList);
-                paidParking = Boolean.FALSE;
-                i++;
+            if (paidParking.equals(Boolean.FALSE)) {
+                int i = 0;
+                while (paidParkingZone_lat[i]!=null) {
+                    paid_markerList.add(createMarker(naverMap, paidParkingZone_lat[i], paidParkingZone_lon[i], "paid"));
+                    paidParking = Boolean.TRUE;
+                    i++;
+                }
+            } else {
+                int i = 0;
+                while (paidParkingZone_lat[i]!=null) {
+                    mapFragment.hideMarkers(paid_markerList);
+                    paidParking = Boolean.FALSE;
+                    i++;
+                }
             }
         }
+
     }
 
     public void check_location() {
@@ -496,8 +535,7 @@ public class MainActivity extends AppCompatActivity {
             // 권한이 이미 허용된 경우 지도 초기화
 
             Log.d(TAG, "위치 허용 코드: "+LOCATION_PERMISSION_REQUEST_CODE);
-            MapFragment mapFragment = (MapFragment) getSupportFragmentManager().findFragmentById(R.id.map_layout);
-            mapFragment.initMap();
+
 
         } else {
             // 권한 요청
@@ -505,7 +543,10 @@ public class MainActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this,
                     new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION},
                     LOCATION_PERMISSION_REQUEST_CODE);
+            set_init();
         }
+        MapFragment mapFragment = (MapFragment) getSupportFragmentManager().findFragmentById(R.id.map_layout);
+        mapFragment.initMap();
     }
     // 사용자가 이전에 해당 앱에 위치 정보를 이용하는 것에 동의했는지 확인하는 함수
     // 사용자가 이전에 해당 앱에 위치 정보를 이용하는 것에 동의했다면 true,
@@ -547,8 +588,18 @@ public class MainActivity extends AppCompatActivity {
         bundle.putDouble("loc_lon", lon);
         bundle.putString("loc_link", link);
         bundle.putString("loc_tel", tel);
-        bundle.putString("loc_time", time);
-        bundle.putString("loc_price", price);
+        bundle.putString("week_open", weekOpen);
+        bundle.putString("week_close", weekClose);
+
+        bundle.putString("sat_open", satOpen);
+        bundle.putString("sat_close", satClose);
+
+        bundle.putString("holi_open", holiOpen);
+        bundle.putString("holi_close", holiClose);
+        bundle.putString("baseRate", baseRate);
+        bundle.putString("baseTime", baseTime);
+        bundle.putString("addRate", addRate);
+        bundle.putString("addTime", addTime);
         bundle.putString("loc_category", category);
 
         locationFullFragment = new LocationFullFragment();
