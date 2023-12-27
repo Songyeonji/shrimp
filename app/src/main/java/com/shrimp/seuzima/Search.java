@@ -201,7 +201,7 @@ public class Search extends AppCompatActivity {
                 throw new RuntimeException(e);
             }
 
-            // 여기에서는 비동기적으로 호출되기 때문에 결과가 없거나 기다리지 않는 것이 좋습니다.
+            // 여기에서는 비동기적으로 호출되기 때문에 결과가 없거나 기다리지 않는 것이 좋음.
             return "ApiExamSearchBlog.main 호출 완료";
         }
 
@@ -212,9 +212,6 @@ public class Search extends AppCompatActivity {
         }
     }
 
-    private void set_sub_searched(String name, String addr, int x, int y) {
-
-    }
 
     // '<' 버튼 클릭하면 실행되는 함수. 이전 '홈'화면으로 되돌아가는 코드
     public void before(View view) {

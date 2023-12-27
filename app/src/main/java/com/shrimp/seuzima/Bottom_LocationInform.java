@@ -40,6 +40,10 @@ public class Bottom_LocationInform extends Fragment {
     public static PathOverlay path;
     public static ArrayList<JSONArray> guide_points;
 
+    private String start = NAVI_API.start;
+    private Double start_lat = NAVI_API.startLat;
+    private Double start_lon = NAVI_API.startLon;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -121,19 +125,25 @@ public class Bottom_LocationInform extends Fragment {
 
     }
 
-    public void show_full_view(View view) {
-
-    }
 
     // '도착' 버튼 클릭 시 MainActivity로 이동 + 장소 이름, 주소, 위경도 정보 같이 intent
     public void set_destPoint() {
-        NAVI_API dust = new NAVI_API("내 위치", title, user_lat, user_lon, latitude, longitude);
+        NAVI_API dust = new NAVI_API(start,title, start_lat,start_lon, latitude, longitude);
         dust.execute();
 
 
     }
 
+    // '출발' 버튼 클릭 시 NAVI_API의 출발관련 변수에 해당 장소 정보 저장
     public void set_startPoint() {
+
+        NAVI_API.start = title;
+        NAVI_API.startLat = latitude;
+        NAVI_API.startLon = longitude;
+
+        TextView text_start = getActivity().findViewById(R.id.start_textView);
+        ((MainActivity) MainActivity.context).show_searchingLayout();
+        text_start.setText(title);
 
     }
 }

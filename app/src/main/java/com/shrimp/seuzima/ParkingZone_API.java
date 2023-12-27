@@ -100,8 +100,6 @@ public class ParkingZone_API {
                         // 데이터 파싱하기
                         String jsonString = buffer.toString();
                         JSONObject jsonObject = new JSONObject(jsonString);
-//                        JSONObject response = jsonObject.getJSONObject("response");
-//                        JSONObject body = response.getJSONObject("body");
                         JSONArray items = jsonObject.getJSONArray("resultList");
 
                         for (int i=0; i<num;i++){

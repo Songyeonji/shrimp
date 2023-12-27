@@ -19,7 +19,7 @@ import java.util.Map;
 
 
 public class SEARCH_API {
-
+    // 장소 검색 네이버 API 불러와서 데이터 가져오는 class
     private static String name;
     private static String addr;
     private static int x;
@@ -43,7 +43,6 @@ public class SEARCH_API {
 
 
         String apiURL = "https://openapi.naver.com/v1/search/local.json?query=" + text + "&display=10&start=1&sort=random";    // JSON 결과
-        //String apiURL = "https://openapi.naver.com/v1/search/blog.xml?query="+ text; // XML 결과
 
 
         Map<String, String> requestHeaders = new HashMap<>();
@@ -52,8 +51,6 @@ public class SEARCH_API {
         String responseBody = get(apiURL,requestHeaders);
 
         JSONObject jsonObject = new JSONObject(responseBody);
-//                        JSONObject response = jsonObject.getJSONObject("response");
-//                        JSONObject body = response.getJSONObject("body");
         int total = jsonObject.getInt("total");
         JSONArray items = jsonObject.getJSONArray("items");
 

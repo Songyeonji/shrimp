@@ -15,7 +15,15 @@ import android.widget.TextView;
 
 public class LocationFullFragment extends Fragment {
 
+    private String start = NAVI_API.start;
+    private Double start_lat = NAVI_API.startLat;
+    private Double start_lon = NAVI_API.startLon;
 
+    Double latitude;
+    Double longitude;
+    String title;
+
+    // full view 장소 상세 페이지 (주차장만 해당)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -29,6 +37,22 @@ public class LocationFullFragment extends Fragment {
             public void onClick(View v) {
                 MainActivity mainActivity = (MainActivity) getActivity();
                 mainActivity.show_searchingLayout();
+            }
+        });
+
+        FrameLayout bttnDest = rootview.findViewById(R.id.bttn_dest);
+        bttnDest.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                set_destPoint();
+            }
+        });
+
+        FrameLayout bttnStart = rootview.findViewById(R.id.bttn_start);
+        bttnStart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                set_startPoint();
             }
         });
         return rootview;
@@ -58,10 +82,10 @@ public class LocationFullFragment extends Fragment {
 
 
         // mapview에서 받아온 위치 정보(이름, 주소, 위경도) 가져와서 문자열 및 double 변수에 저장
-        String title = this.getArguments().getString("loc_name");
+        title = this.getArguments().getString("loc_name");
         String addr = this.getArguments().getString("loc_addr");
-        Double latitude = this.getArguments().getDouble("loc_lat");
-        Double longitude = this.getArguments().getDouble("loc_lon");
+        latitude = this.getArguments().getDouble("loc_lat");
+        longitude = this.getArguments().getDouble("loc_lon");
         String weekOpen = this.getArguments().getString("weekOpen");
         String weekClose = this.getArguments().getString("weekClose");
         String satOpen = this.getArguments().getString("satOpen");
@@ -91,6 +115,27 @@ public class LocationFullFragment extends Fragment {
 
         loc_category.setText(category);
 
+
+    }
+
+    // '도착' 버튼 클릭 시 MainActivity로 이동 + 장소 이름, 주소, 위경도 정보 같이 intent
+    public void set_destPoint() {
+        NAVI_API dust = new NAVI_API(start,title, start_lat,start_lon, latitude, longitude);
+        dust.execute();
+
+
+    }
+
+    // '출발' 버튼 클릭 시 NAVI_API의 출발관련 변수에 해당 장소 정보 저장
+    public void set_startPoint() {
+
+        NAVI_API.start = title;
+        NAVI_API.startLat = latitude;
+        NAVI_API.startLon = longitude;
+
+        TextView text_start = getActivity().findViewById(R.id.start_textView);
+        ((MainActivity) MainActivity.context).show_searchingLayout();
+        text_start.setText(title);
 
     }
 }

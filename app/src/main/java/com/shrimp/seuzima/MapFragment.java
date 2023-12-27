@@ -82,7 +82,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public View onCreateView(LayoutInflater inflaters, ViewGroup containers,
                              Bundle savedInstanceStates) {
-        // Inflate the layout for this fragment
 
         inflater = inflaters;
         container = containers;
@@ -202,6 +201,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         }
     }
 
+    // 주행모드 네비게이션 페이지(NaviActivity)에서 지도 세팅하는 함수
     public void set_navigation_map(NaverMap naverMap) {
         LocationOverlay locationOverlay = naverMap.getLocationOverlay();
         locationOverlay.setVisible(true);
@@ -249,7 +249,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
         JSONArray guideArray = NAVI_API.guideArray;
         ArrayList<JSONArray> guidePoint = NAVI_API.guide_points;
-//        path = new PathOverlay();
 
 
         final int[] n = {0};
@@ -316,10 +315,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                             }
 
                         } else if (guide.contains("우회전")||(guide.contains("오른쪽") && guide.contains("시 방향"))) {
-                /*guide_img.setImageResource(R.drawable.turn_right);
 
-                Animation blinkAnimation = AnimationUtils.loadAnimation(CameraActivity.this, R.anim.blink_anim);
-                guide_img.startAnimation(blinkAnimation);*/
                             if (textToSpeech.isSpeaking()==false) {
                                 if (guide.contains("오른쪽")) {
                                     textToSpeech.speak("100미터 앞에서 "+guide+"으로 우회전 하세요.", TextToSpeech.QUEUE_FLUSH, null);
@@ -362,6 +358,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         });
     }
 
+    // 주행모드에서 네비게이션을 이용할 때(NaviActivity에서) 실행되는 함수
+    // 실시간으로 사용자 위치 추적해서 다음 경로를 안내하고 이를 음성으로 지원.
     private void set_guide(String guide, float distance, String next_guide, float next_distance) {
         TextView textView_distance = getActivity().findViewById(R.id.dist_text);
         TextView textView_next_distance = getActivity().findViewById(R.id.second_dist_text);

@@ -62,6 +62,7 @@ public class PreviewFragment extends Fragment {
         set_text();
     }
 
+    // MainActivity에서 받아온 데이터를 textview에 넣는 함수
     private void set_text() {
         start_textView.setText(start_text);
         dest_textView.setText(dest_text);
@@ -92,7 +93,4 @@ public class PreviewFragment extends Fragment {
         }
     }
 
-    public void before_home(View view) {
-
-    }
 }

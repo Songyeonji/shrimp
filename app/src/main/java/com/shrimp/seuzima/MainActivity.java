@@ -142,15 +142,9 @@ public class MainActivity extends AppCompatActivity {
         fragmentTransaction.commit();
     }
 
-    private void show_waiting_view() {
-        findViewById(R.id.home_content).setVisibility(View.GONE);
-        FrameLayout full_view = findViewById(R.id.full_view);
-        full_view.setVisibility(View.VISIBLE);
 
-        WaitingFragment waitingFragment = new WaitingFragment();
-        getSupportFragmentManager().beginTransaction().replace(R.id.full_view, waitingFragment).commit();
-    }
 
+    // Activity 시작할 때 지도 초기화 설정
     public void set_init() {
         Intent getintent = getIntent();
         name = getintent.getStringExtra("loc_name");
@@ -353,6 +347,7 @@ public class MainActivity extends AppCompatActivity {
         return marker;
     }
 
+    // 장소 상세 페이지가 하단에 나타나도록 하는 함수
     private void show_Bottom_Location(String name, String addr, Double lat, Double lon, String weekOpen, String weekClose, String satOpen, String satClose, String holiOpen, String holiClose, String baseRate, String addRate,String baseTime, String addTime, String category) {
 
         LinearLayout search_layout = findViewById(R.id.search_layout);
@@ -465,6 +460,8 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
+    
+    // 하단에 검색 페이지 나타나도록 하기 (원래 처음에 있었던 '어디로 가세요' 페이지 나타나도록 하기)
     public void show_searchingLayout() {
         if (findViewById(R.id.home_content).getVisibility()==View.GONE) {
             findViewById(R.id.home_content).setVisibility(View.VISIBLE);
@@ -530,6 +527,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    // 위치 추적 허용 확인
     public void check_location() {
         if (hasLocationPermissions()) {
             // 권한이 이미 허용된 경우 지도 초기화
@@ -548,6 +546,7 @@ public class MainActivity extends AppCompatActivity {
         MapFragment mapFragment = (MapFragment) getSupportFragmentManager().findFragmentById(R.id.map_layout);
         mapFragment.initMap();
     }
+    
     // 사용자가 이전에 해당 앱에 위치 정보를 이용하는 것에 동의했는지 확인하는 함수
     // 사용자가 이전에 해당 앱에 위치 정보를 이용하는 것에 동의했다면 true,
     // 그렇지 않으면 false 반환
@@ -561,6 +560,7 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    // gps 버튼 클릭시 사용자 위치 추적 다시 시작 & 화면 초기화
     public void set_up(View view) {
         if (loc_marker!=null) {
             loc_marker.setMap(null);
@@ -571,11 +571,14 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    // 예상 경로 미리보기 화면 -> 이전 홈화면으로 변환하는 함수
     public void before_home(View view) {
         NAVI_API.path.setMap(null);
         findViewById(R.id.preview_content).setVisibility(View.GONE);
         findViewById(R.id.home_content).setVisibility(View.VISIBLE);
     }
+    
+    // 장소 상세 페이지 나타나기 함수 (주차장만 해당)
     public void show_full_view(View view) {
         findViewById(R.id.home_content).setVisibility(View.GONE);
         FrameLayout full_view = findViewById(R.id.full_view);
@@ -607,7 +610,11 @@ public class MainActivity extends AppCompatActivity {
         getSupportFragmentManager().beginTransaction().replace(R.id.full_view, locationFullFragment).commit();
     }
 
+    // 경로 안내 미리보기 화면 띄우기
     public void set_preview_content(String start, String dest) {
+        if (findViewById(R.id.full_view).getVisibility()==View.VISIBLE) {
+            findViewById(R.id.full_view).setVisibility(View.GONE);
+        }
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 

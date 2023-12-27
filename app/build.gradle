@@ -10,9 +10,10 @@ android {
         applicationId "com.shrimp.seuzima"
         minSdk 24
         targetSdk 33
-        versionCode 3
+        versionCode 4
         versionName "1.0"
         buildConfigField "String","NAVER_MAP_API_KEY", NAVER_MAP_API_KEY
+        buildConfigField "String","NAVER_MAP_API_CLIENT_KEY", NAVER_MAP_API_CLIENT_KEY
         buildConfigField "String","NAVER_CLIENT_ID", NAVER_CLIENT_ID
         buildConfigField "String","NAVER_CLIENT_SECRET", NAVER_CLIENT_SECRET
         buildConfigField "String","NOPARKING_ZONE_API_KEY", NOPARKING_ZONE_API_KEY

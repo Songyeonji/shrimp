@@ -21,12 +21,12 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public class NAVI_API extends AsyncTask<Void, Void, String> {
-    Double startLat;
-    Double startLon;
-    Double destLat;
-    Double destLon;
-    String start;
-    String dest;
+    public static Double startLat = MapFragment.user_lat;
+    public static Double startLon = MapFragment.user_lon;
+    public static Double destLat;
+    public static Double destLon;
+    public static String start = "내 위치";
+    public static String dest;
     public static JSONArray pathArray;
     public static JSONArray guideArray;
     int num;
@@ -47,18 +47,17 @@ public class NAVI_API extends AsyncTask<Void, Void, String> {
     protected String doInBackground(Void... voids) {
         OkHttpClient client = new OkHttpClient();
 
-        String url = "https://naveropenapi.apigw.ntruss.com/map-direction-15/v1/driving?start="+startLon+","+startLat+"&goal="+destLon+","+destLat+"&option=traavoidcaronly";
+        String url = "https://naveropenapi.apigw.ntruss.com/map-direction-15/v1/driving?start="+startLon+","+startLat+"&goal="+destLon+","+destLat+"&option=trafast";
 
         Request request = new Request.Builder()
                 .url(url)
-                .addHeader("X-NCP-APIGW-API-KEY-ID", "83ejnr111i")
-                .addHeader("X-NCP-APIGW-API-KEY", "aNvQoAyX9qhWbEGYENZIaY06jTRFurpIjaUMxWJ8")
+                .addHeader("X-NCP-APIGW-API-KEY-ID", BuildConfig.NAVER_MAP_API_KEY)
+                .addHeader("X-NCP-APIGW-API-KEY", BuildConfig.NAVER_MAP_API_CLIENT_KEY)
                 .build();
 
         try {
             Response response = client.newCall(request).execute();
             String responseJson = response.body().string();
-//            Log.d("Response", responseJson);
             return responseJson;
         } catch (IOException e) {
             e.printStackTrace();
@@ -70,8 +69,6 @@ public class NAVI_API extends AsyncTask<Void, Void, String> {
     @Override
     protected void onPostExecute(String responseJson) {
         if (responseJson != null) {
-            // TODO: JSON 데이터 처리
-//            Log.d("Response1", responseJson);
             read_json(responseJson);
         } else {
             Log.e("Error", "Network request failed");
@@ -83,13 +80,12 @@ public class NAVI_API extends AsyncTask<Void, Void, String> {
         //json 자료 가져오기
         try {
             //배열로된 자료를 가져올때
-            JSONObject Object = new JSONObject(json).getJSONObject("route").getJSONArray("traavoidcaronly").getJSONObject(0);//배열의 이름
+            JSONObject Object = new JSONObject(json).getJSONObject("route").getJSONArray("trafast").getJSONObject(0);//배열의 이름
             pathArray = Object.getJSONArray("path");
             guideArray = Object.getJSONArray("guide");
             guide_points = new ArrayList<JSONArray>();
             Log.d("Object", Object.toString());
 
-//            Log.d("path", pathArray.getString(0));
             path = new PathOverlay();
 
             List<LatLng> coords = new ArrayList<>();
@@ -104,21 +100,20 @@ public class NAVI_API extends AsyncTask<Void, Void, String> {
                 }
             }
 
+            // 출발지 -> 목적지 걸리는 시간
             duration = Object.getJSONObject("summary").getInt("duration")/1000/60;
-
+            // 출발지 -> 목적지 거리
             distance = Object.getJSONObject("summary").getInt("distance")/100;
 
             ((MainActivity) MainActivity.context).set_preview_content(start, dest);
 
-            Log.d("dur:", String.valueOf(duration));
-            Log.d("dis:", String.valueOf(distance));
-            /*Log.d("guidePoints", guide_points.toString());
-            Log.d("Coords", coords.toString());*/
+            /*Log.d("dur:", String.valueOf(duration));
+            Log.d("dis:", String.valueOf(distance));*/
+
+            // 네비게이션 루트 지도 위에 그리기
             path.setCoords(coords);
             path.setOutlineWidth(0);
             path.setWidth(25);
-            /*path.setColor(Color.rgb(90, 156, 242));
-            path.setPassedColor(Color.GRAY);*/
             path.setColor(Color.argb(50, 90, 156, 242));
             path.setMap(MapFragment.naverMap);
 
