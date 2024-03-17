@@ -67,4 +67,4 @@
 <br><br>
 ### 문제 해결 과정
 ------------------------------------------
-[![Video Label](http://img.youtube.com/vi/watch?v=gG-4jc-vTXA/0.jpg)](https://www.youtube.com/watch?v=gG-4jc-vTXA)
+[![Video Label](http://img.youtube.com/vi/gG-4jc-vTXA?si=VoJWcGniPZOvyM24/0.jpg)](https://youtu.be/gG-4jc-vTXA?si=VoJWcGniPZOvyM24)
